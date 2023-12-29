@@ -1,6 +1,7 @@
 package com.example.common_project01.ui.friends
 
 import FriendListAdapter
+import android.content.ContentValues
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.common_project01.R
 import com.example.common_project01.databinding.FragmentFriendListBinding
+import com.example.common_project01.ui.DatabaseHelper
+import com.example.common_project01.ui.UserProfile
 
 class FriendListFragment : Fragment() {
 
