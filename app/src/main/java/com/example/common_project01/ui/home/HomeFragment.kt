@@ -1,10 +1,15 @@
 package com.example.common_project01.ui.home
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import com.example.common_project01.databinding.FragmentHomeBinding
 
@@ -16,6 +21,10 @@ class HomeFragment : Fragment() {
     private var userID: String = "userID"
     private lateinit var fname: String
     private lateinit var str: String
+    private lateinit var pickImageLauncher: ActivityResultLauncher<String>
+    companion object {
+        private const val IMAGE_REQUEST_CODE = 1000
+    }
 
 
     // onCreateView: Fragment의 뷰를 생성할 때 호출하는 메서드
@@ -71,6 +80,13 @@ class HomeFragment : Fragment() {
                 saveBtn.visibility = View.VISIBLE
                 removeDiary()
             }
+
+            pickImageButton.setOnClickListener {
+                pickImageFromGallery()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.pickImageButton.visibility = View.INVISIBLE
+                }, 2000)
+            }
         }
 
         return view
@@ -118,6 +134,18 @@ class HomeFragment : Fragment() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+    private fun pickImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            binding.imageView.setImageURI(data?.data)
         }
     }
     override fun onDestroyView() {
