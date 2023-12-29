@@ -22,4 +22,13 @@
         android:name="com.example.common_project01.ui.friends.FriendListFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_friend_list" />
+
+    <!-- mobile_navigation.xml -->
+    <fragment
+        android:id="@+id/navigation_profile_edit"
+        android:name="com.example.common_project01.ui.friends.ProfileEditFragment"
+        android:label="프로필 수정" />
+
+
+
 </navigation>

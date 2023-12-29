@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.common_project01.R
@@ -81,6 +83,14 @@ class FriendListFragment : Fragment() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
+        }
+// FriendListFragment.kt
+
+// 버튼 클릭 핸들러
+        val editProfileButton = view.findViewById<Button>(R.id.edit_profile_button)
+        editProfileButton.setOnClickListener {
+            // 프로필 수정 프래그먼트로 이동하는 네비게이션 액션 실행
+            findNavController().navigate(R.id.navigation_profile_edit)
         }
 
         return view
