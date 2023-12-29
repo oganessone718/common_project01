@@ -8,6 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.common_project01.databinding.ActivityMainBinding
+import com.example.common_project01.ui.DatabaseHelper
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,5 +30,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+//        val dbHelper = DatabaseHelper(this)
+//        dbHelper.writableDatabase
     }
 }

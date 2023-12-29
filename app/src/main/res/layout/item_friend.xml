@@ -36,7 +36,7 @@
                 android:id="@+id/friend_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="2dp"
+                android:paddingStart="8dp"
                 android:textSize="14sp" />
         </LinearLayout>
 
