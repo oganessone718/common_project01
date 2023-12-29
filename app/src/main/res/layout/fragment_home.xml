@@ -99,37 +99,40 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginBottom="56dp"
             android:text="저장"
             android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/contextEditText" />
+            app:layout_constraintTop_toBottomOf="@+id/contextEditText"/>
 
         <Button
             android:id="@+id/updateBtn"
-            android:layout_width="180dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:text="수정"
             android:visibility="invisible"
-            app:layout_constraintBaseline_toBaselineOf="@+id/saveBtn"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
-            app:layout_constraintHorizontal_bias="0.727"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/saveBtn"
+            app:layout_constraintBottom_toBottomOf="@+id/saveBtn" />
 
         <Button
             android:id="@+id/deleteBtn"
-            android:text="삭제"
-            android:layout_width="176dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBaseline_toBaselineOf="@+id/updateBtn"
-            app:layout_constraintEnd_toEndOf="@+id/saveBtn"
+            android:text="삭제"
+            android:visibility="invisible"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:visibility="invisible">
-        </Button>
+            app:layout_constraintStart_toEndOf="@+id/updateBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/updateBtn"
+            app:layout_constraintBottom_toBottomOf="@+id/updateBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
