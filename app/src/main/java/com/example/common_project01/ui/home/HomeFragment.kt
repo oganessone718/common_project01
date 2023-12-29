@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.common_project01.databinding.FragmentHomeBinding
-import java.text.SimpleDateFormat
-import java.util.*
 
 class HomeFragment : Fragment() {
 
@@ -19,6 +17,8 @@ class HomeFragment : Fragment() {
     private lateinit var fname: String
     private lateinit var str: String
 
+
+    // onCreateView: Fragment의 뷰를 생성할 때 호출하는 메서드
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -28,6 +28,8 @@ class HomeFragment : Fragment() {
         // UI 초기화
         with(binding) {
             title.text = "시나브로"
+
+            // CalendarView의 날짜 변경 리스너 설정
             calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
                 saveBtn.visibility = View.VISIBLE
                 contextEditText.visibility = View.VISIBLE
@@ -73,7 +75,6 @@ class HomeFragment : Fragment() {
 
         return view
     }
-
 
     private fun checkDay(year: Int, month: Int, day: Int) {
         fname = "$userID$year-${month + 1}-$day.txt"
