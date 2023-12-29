@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.common_project01.R
 import com.example.common_project01.ui.UserProfile
-import com.example.common_project01.ui.friends.Friend
 
 class FriendListAdapter(private val friendList: List<UserProfile>) : RecyclerView.Adapter<FriendListAdapter.FriendViewHolder>() {
 

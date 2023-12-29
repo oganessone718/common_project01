@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
 
 
 data class UserProfile(
-    val primaryId: Int,            // 유저 ID (고유 식별자)
+    val primaryId: Int,     // 유저 ID (고유 식별자)
     val name: String,       // 이름
     val id: String,   // 사용자 이름 또는 아이디
     val intro: String,        // 자기 소개
@@ -90,8 +90,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             val id = cursor.getString(cursor.getColumnIndex("id"))
             val intro = cursor.getString(cursor.getColumnIndex("intro"))
             val image = cursor.getString(cursor.getColumnIndex("image"))
-//            val profile = cursor.getString(cursor.getColumnIndex(profile))
-            val profile = false
+            val profileInt = cursor.getInt(cursor.getColumnIndex("profile"))
+            val profile = profileInt == 1
 
             val userProfile = UserProfile(primaryId, name, id, intro, image, profile)
             userList.add(userProfile)

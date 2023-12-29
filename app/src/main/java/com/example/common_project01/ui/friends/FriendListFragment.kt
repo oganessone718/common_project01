@@ -62,33 +62,25 @@ class FriendListFragment : Fragment() {
 
         for (i:Int in 1..10)
             addDummyUserProfile(i)
-            print("엥??")
+
+        val MyProfile = UserProfile(
+            primaryId = 0,          // ID는 고유한 값으로 설정
+            name = "박정민",   // 이름 설정
+            id = "oganessone718",
+            intro = "제발살려줘",  // 자기 소개 설정
+            image = "사진 어카늉",  // 프로필 이미지 URL 또는 파일 경로 설정
+            profile = true
+        )
+
+        // 데이터베이스에 유저 프로필 추가
+        dbHelper.addProfile(MyProfile)
 
         val userList = dbHelper.getUsers()
 
-//        val friends = listOf(
-//            Friend(R.drawable.ic_home_black_24dp, "박정민", "@oganessone718", "우짜노",true),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            Friend(R.drawable.ic_home_black_24dp, "영재", "@genius", "짱짱맨",false),
-//            // ... Add more friends here
-//        )
         val myProfile = userList.find { it.profile }
         val friendList = userList.filter { !it.profile }
 
         if (myProfile != null) {
-            println("으아아")
             // 프로필 레이아웃을 findViewById 또는 inflater를 사용하여 생성
             val profileLayout = view.findViewById<View>(R.id.profile_layout)
 
