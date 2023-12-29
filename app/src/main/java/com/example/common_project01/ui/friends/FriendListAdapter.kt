@@ -5,7 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.common_project01.R
-import com.example.common_project01.ui.notifications.Friend
+import com.example.common_project01.ui.friends.Friend
 
 class FriendListAdapter(private val friendList: List<Friend>) : RecyclerView.Adapter<FriendListAdapter.FriendViewHolder>() {
 
