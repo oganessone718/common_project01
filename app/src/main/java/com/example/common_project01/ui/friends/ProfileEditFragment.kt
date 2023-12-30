@@ -1,11 +1,14 @@
 package com.example.common_project01.ui.friends
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.common_project01.R
+import com.example.common_project01.ui.DatabaseHelper
 
 //import kotlinx.android.synthetic.main.fragment_profile_edit.*
 
@@ -19,21 +22,41 @@ class ProfileEditFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_profile_edit, container, false)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val dbHelper = DatabaseHelper(requireContext())
+
+        val saveButton = view.findViewById<View>(R.id.save_button)
+
+        val myProfile = dbHelper.getProfile()
+
+        val editId = view.findViewById<EditText>(R.id.edit_id)
+        val editName = view.findViewById<EditText>(R.id.edit_name)
+        val editIntro = view.findViewById<EditText>(R.id.edit_intro)
+        var myPrimaryId = "tmp"
+
+        if(myProfile.size!=1) {
+            print("error")
+            editId.setText(myProfile.size.toString())
+        }
+        else {
+            myPrimaryId = myProfile[0].id
+            editId.setText(myProfile[0].id)
+            editName.setText(myProfile[0].name)
+            editIntro.setText(myProfile[0].intro)
+            // 수정필요(사진추가)
+            }
+
         // 저장 버튼 클릭 이벤트 처리
-//        save_button.setOnClickListener {
-//            // 입력된 정보 가져오기
-//            val updatedName = edit_name.text.toString()
-//            val updatedId = edit_id.text.toString()
-//            val updatedIntro = edit_intro.text.toString()
-//
-//            // 여기에서 수정된 정보를 사용하여 프로필 업데이트 로직을 구현할 수 있음
-//            // 여기서는 가상의 업데이트 함수를 호출하는 것으로 대체
-//
-//            // 업데이트 후 프로필 화면으로 이동
-//            findNavController().navigate(R.id.action_profileEditFragment_to_profileFragment)
-//        }
+        saveButton.setOnClickListener {
+            // 입력된 정보 가져오기
+            val updatedId = editId.text.toString()
+            val updatedName = editName.text.toString()
+            val updatedIntro = editIntro.text.toString()
+            val updatedImage = "수정필요"
+            dbHelper.updateProfile(myPrimaryId, updatedId, updatedName, updatedIntro, updatedImage)
+        }
     }
 }

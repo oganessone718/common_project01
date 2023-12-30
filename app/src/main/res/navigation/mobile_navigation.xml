@@ -29,6 +29,4 @@
         android:name="com.example.common_project01.ui.friends.ProfileEditFragment"
         android:label="프로필 수정" />
 
-
-
 </navigation>
