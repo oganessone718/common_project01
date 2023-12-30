@@ -110,7 +110,7 @@
                 android:textSize="14sp"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:paddingBottom="56dp"
+                android:layout_marginBottom="56dp"
                 android:id="@+id/friends_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
