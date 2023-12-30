@@ -155,11 +155,19 @@ class HomeFragment : Fragment() {
 
     private fun removeDiary() {
         try {
+            // 텍스트 파일 삭제
             context?.openFileOutput(fname, Context.MODE_PRIVATE)?.use { fileOutputStream ->
                 fileOutputStream.write("".toByteArray())
-                with(binding) {
-                    diaryContent.text = ""
-                }
+            }
+            // 이미지 파일 삭제
+            val imgName = "$userID${currentYear}-${currentMonth + 1}-${currentDay}-image.txt"
+            context?.deleteFile(imgName)
+
+            with(binding) {
+                // UI 업데이트
+                diaryContent.text = "" // 텍스트 내용 삭제
+                imageView.setImageDrawable(null) // 이미지 뷰 초기화
+                pickImageButton.visibility = View.VISIBLE // 이미지 선택 버튼 보이게 설정
             }
         } catch (e: Exception) {
             e.printStackTrace()
