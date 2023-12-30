@@ -32,19 +32,20 @@ class ProfileEditFragment : Fragment() {
 
         val myProfile = dbHelper.getProfile()
 
-        val editId = view.findViewById<EditText>(R.id.edit_id)
         val editName = view.findViewById<EditText>(R.id.edit_name)
+        val editId = view.findViewById<EditText>(R.id.edit_id)
         val editIntro = view.findViewById<EditText>(R.id.edit_intro)
-        var myPrimaryId = "tmp"
+        //수정필요(사진추가)
+        var myPrimaryId = -1
 
         if(myProfile.size!=1) {
             print("error")
             editId.setText(myProfile.size.toString())
         }
         else {
-            myPrimaryId = myProfile[0].id
-            editId.setText(myProfile[0].id)
+            myPrimaryId = myProfile[0].primaryKey
             editName.setText(myProfile[0].name)
+            editId.setText(myProfile[0].id)
             editIntro.setText(myProfile[0].intro)
             // 수정필요(사진추가)
             }
@@ -52,11 +53,11 @@ class ProfileEditFragment : Fragment() {
         // 저장 버튼 클릭 이벤트 처리
         saveButton.setOnClickListener {
             // 입력된 정보 가져오기
-            val updatedId = editId.text.toString()
             val updatedName = editName.text.toString()
+            val updatedId = editId.text.toString()
             val updatedIntro = editIntro.text.toString()
             val updatedImage = "수정필요"
-            dbHelper.updateProfile(myPrimaryId, updatedId, updatedName, updatedIntro, updatedImage)
+            dbHelper.updateProfile(myPrimaryId, updatedName, updatedId, updatedIntro, updatedImage)
         }
     }
 }

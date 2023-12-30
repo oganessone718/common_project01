@@ -40,12 +40,11 @@ class FriendListFragment : Fragment() {
 
         val dbHelper = DatabaseHelper(requireContext())
 
-        for (i:Int in 1..10)
-            dbHelper.addProfile("JohnID","john","John, I'm tired!","사진우예",false)
-
-
-        // 데이터베이스에 유저 프로필 추가
-        dbHelper.addProfile("oganessone718","박정민","제발살려줘","사진 어카늉",true)
+//        // 데이터베이스에 유저 프로필 추가
+//        dbHelper.addProfile("박정민","oganessone718","제발살려줘","사진 어카늉",true)
+//
+//        for (i:Int in 1..10)
+//            dbHelper.addProfile("john","JohnID","John, I'm tired!","사진우예",false)
 
         val userList = dbHelper.getUsers()
 
