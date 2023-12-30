@@ -24,7 +24,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     private val TABLE_NAME = "user_profiles"
 
-    private fun getUserCount(): Int {
+    fun getUserCount(): Int {
         val db = this.readableDatabase
         val query = "SELECT COUNT(*) FROM $TABLE_NAME"
         val cursor = db.rawQuery(query, null)
@@ -52,10 +52,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        if (oldVersion < 2) {
-            // 버전 1에서 버전 2로 업그레이드하는 경우
-            db?.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN image TEXT;")
-        }
+        db?.execSQL("DROP TABLE IF EXISTS tableName");
+        onCreate(db);
     }
 
 
