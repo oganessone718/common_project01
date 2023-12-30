@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,9 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var userID: String = "userID"
+    private var currentYear: Int = 0
+    private var currentMonth: Int = 0
+    private var currentDay: Int = 0
     private lateinit var fname: String
     private lateinit var str: String
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
@@ -40,12 +44,32 @@ class HomeFragment : Fragment() {
 
             // CalendarView의 날짜 변경 리스너 설정
             calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+                currentYear = year
+                currentMonth = month
+                currentDay = dayOfMonth
+
+                contextEditText.setText("")
+                // 선택된 날짜에 해당하는 이미지 파일 이름
+                val imgName = "$userID$year-${month + 1}-$dayOfMonth-image.txt"
+
+                // 이미지 파일 존재 여부 확인
+                val imgFile = context?.getFileStreamPath(imgName)
+                if (imgFile != null && imgFile.exists()) {
+                    // 이미지 파일이 존재하면 로드
+                    val imgPath = imgFile.inputStream().bufferedReader().use { it.readText() }
+                    loadImage(imgPath)
+                    binding.pickImageButton.visibility = View.INVISIBLE
+                } else {
+                    // 이미지 파일이 없으면 이미지 뷰 초기화
+                    binding.imageView.setImageDrawable(null)
+                    // 이미지 선택 버튼 visible
+                    binding.pickImageButton.visibility = View.VISIBLE
+                }
                 saveBtn.visibility = View.VISIBLE
                 contextEditText.visibility = View.VISIBLE
                 diaryContent.visibility = View.INVISIBLE
                 updateBtn.visibility = View.INVISIBLE
                 deleteBtn.visibility = View.INVISIBLE
-                contextEditText.setText("")
                 checkDay(year, month, dayOfMonth)
             }
             // Save 버튼 클릭 리스너
@@ -94,6 +118,7 @@ class HomeFragment : Fragment() {
 
     private fun checkDay(year: Int, month: Int, day: Int) {
         fname = "$userID$year-${month + 1}-$day.txt"
+        val imgName = "$userID$year-${month + 1}-$day-image.txt" // 이미지 파일 경로를 저장할 파일명
         try {
             context?.openFileInput(fname)?.use { fileInputStream ->
                 val fileData = ByteArray(fileInputStream.available())
@@ -107,6 +132,10 @@ class HomeFragment : Fragment() {
                     updateBtn.visibility = View.VISIBLE
                     deleteBtn.visibility = View.VISIBLE
                 }
+            }
+            context?.openFileInput(imgName)?.use { fileInputStream -> // 이미지 경로 로드
+                val imgPath = fileInputStream.bufferedReader().use { it.readText() }
+                loadImage(imgPath) // 이미지 로드 함수 호출
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -126,11 +155,19 @@ class HomeFragment : Fragment() {
 
     private fun removeDiary() {
         try {
+            // 텍스트 파일 삭제
             context?.openFileOutput(fname, Context.MODE_PRIVATE)?.use { fileOutputStream ->
                 fileOutputStream.write("".toByteArray())
-                with(binding) {
-                    diaryContent.text = ""
-                }
+            }
+            // 이미지 파일 삭제
+            val imgName = "$userID${currentYear}-${currentMonth + 1}-${currentDay}-image.txt"
+            context?.deleteFile(imgName)
+
+            with(binding) {
+                // UI 업데이트
+                diaryContent.text = "" // 텍스트 내용 삭제
+                imageView.setImageDrawable(null) // 이미지 뷰 초기화
+                pickImageButton.visibility = View.VISIBLE // 이미지 선택 버튼 보이게 설정
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -142,10 +179,26 @@ class HomeFragment : Fragment() {
         startActivityForResult(intent, IMAGE_REQUEST_CODE)
     }
 
+    // 이미지 로드 함수
+    private fun loadImage(imagePath: String) {
+        // imagePath를 사용하여 imageView에 이미지 로드
+        val imgUri = Uri.parse(imagePath)
+        binding.imageView.setImageURI(imgUri)
+    }
+
+    // 이미지 선택 후 onActivityResult에서 이미지 경로 저장
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            binding.imageView.setImageURI(data?.data)
+            val imgUri = data?.data
+            binding.imageView.setImageURI(imgUri)
+
+            // 이미지 경로 저장
+            val imgName = "$userID${currentYear}-${currentMonth + 1}-${currentDay}-image.txt"
+            context?.openFileOutput(imgName, Context.MODE_PRIVATE)?.use { fileOutputStream ->
+                val imgPath = imgUri.toString()
+                fileOutputStream.write(imgPath.toByteArray())
+            }
         }
     }
     override fun onDestroyView() {
