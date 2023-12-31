@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
     private lateinit var str: String
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
     companion object {
-        private const val IMAGE_REQUEST_CODE = 1000
+        const val IMAGE_REQUEST_CODE = 1000
     }
 
 
