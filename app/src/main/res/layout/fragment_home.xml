@@ -16,8 +16,8 @@
 
         <CalendarView
             android:id="@+id/calendarView"
-            android:layout_width="393dp"
-            android:layout_height="302dp"
+            android:layout_width="402dp"
+            android:layout_height="345dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
@@ -28,8 +28,8 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="225dp"
-            android:layout_height="148dp"
+            android:layout_width="244dp"
+            android:layout_height="188dp"
             android:layout_marginTop="4dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,6 @@
             app:layout_constraintEnd_toEndOf="@id/imageView"
             app:layout_constraintStart_toStartOf="@id/imageView"
             app:layout_constraintTop_toTopOf="@id/imageView" />
-
         <EditText
             android:id="@+id/contextEditText"
             android:layout_width="378dp"
@@ -61,6 +60,7 @@
             app:layout_constraintHorizontal_bias="0.47"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
 
         <TextView
             android:id="@+id/diaryContent"
