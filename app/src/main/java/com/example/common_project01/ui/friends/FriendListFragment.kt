@@ -22,9 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.common_project01.R
 import com.example.common_project01.databinding.FragmentFriendListBinding
-import com.example.common_project01.databinding.FragmentHomeBinding
 import com.example.common_project01.ui.DatabaseHelper
-import com.example.common_project01.ui.UserProfile
 
 class FriendListFragment : Fragment() {
 
