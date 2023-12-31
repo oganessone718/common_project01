@@ -33,6 +33,7 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.os.Build
+import android.util.Log
 
 object RealPathUtil {
 
@@ -98,8 +99,6 @@ class ProfileEditFragment : Fragment() {
     private lateinit var editView: ImageView
     private lateinit var updatedImage: String
 
-    //    private var _binding: FragmentFriendListBinding? = null
-//    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -144,6 +143,7 @@ class ProfileEditFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         var realPath: String? = null
+        Log.d("MyTag", "안 들어감..왜")
 
         if (requestCode == IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             val imageUri: Uri = data.data!!
@@ -156,6 +156,7 @@ class ProfileEditFragment : Fragment() {
                 realPath = data.data?.let { RealPathUtil.getRealPathFromURI_API19(requireContext(), it) }
             editView.setImageURI(Uri.parse(realPath))
             updatedImage = realPath.toString()
+            Log.d("MyTag", "안 들어감..왜")
         }
     }
 

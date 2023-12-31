@@ -52,7 +52,7 @@ class FriendListFragment : Fragment() {
             }
         }
     }
-    fun readJsonFile(context: Context, fileName: String): List<UserProfile> {
+    private fun readJsonFile(context: Context, fileName: String): List<UserProfile> {
         val jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
 
         val gson = Gson()
@@ -65,6 +65,8 @@ class FriendListFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
+        Log.d("MyTag", "Create")
+
         lateinit var recyclerView: RecyclerView
         lateinit var viewAdapter: RecyclerView.Adapter<*>
         lateinit var viewManager: RecyclerView.LayoutManager
@@ -73,8 +75,14 @@ class FriendListFragment : Fragment() {
 
         val dbHelper = DatabaseHelper(requireContext())
 
-        val userList  = readJsonFile(requireContext(), "users.json")
-        dbHelper.addAllProfilesToDatabase(userList)
+        val firstUserList  = readJsonFile(requireContext(), "users.json")
+
+        if (dbHelper.getUserCount()==0){
+            Log.d("MyTag", "0개라고요?")
+            dbHelper.addAllProfilesToDatabase(firstUserList)
+        }
+
+        val userList = dbHelper.getUsers()
 
         val myProfile = userList.find { it.profile }
         val friendList = userList.filter { !it.profile }
@@ -92,6 +100,7 @@ class FriendListFragment : Fragment() {
 
             if(myImage=="tmp"){
                 profileImage.setImageResource(R.drawable.ic_launcher_background) //임시..
+                Log.d("MyTag", myImage)
             }else{
                 val permission = Manifest.permission.READ_EXTERNAL_STORAGE
                 val granted = PackageManager.PERMISSION_GRANTED
