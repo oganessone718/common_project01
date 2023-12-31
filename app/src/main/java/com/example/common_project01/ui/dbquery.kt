@@ -15,18 +15,24 @@ data class UserProfile(
     val profile: Boolean // 프로필 or 친구목록
 )
 
+data class DiaryData(
+    val userId: String,
+    val date: String,
+    val image: String,
+    val feed: String
+)
+
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_NAME = "UserProfileDatabase.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_NAME = "Database.db"
+        private const val DATABASE_VERSION = 2
     }
 
-    private val TABLE_NAME = "user_profiles"
 
     fun getUserCount(): Int {
         val db = this.readableDatabase
-        val query = "SELECT COUNT(*) FROM $TABLE_NAME"
+        val query = "SELECT COUNT(*) FROM user_profiles"
         val cursor = db.rawQuery(query, null)
         var userCount = 0
 
@@ -40,13 +46,22 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(
-            "CREATE TABLE $TABLE_NAME (" +
+            "CREATE TABLE user_profiles (" +
                     "primaryKey INTEGER PRIMARY KEY AUTOINCREMENT,"+
                     "id TEXT," +
                     "name TEXT," +
                     "intro TEXT," +
                     "image TEXT," +
                     "profile BOOLEAN" +
+                    ");"
+        )
+        db?.execSQL(
+            "CREATE TABLE DiaryData (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                    "userId TEXT," +
+                    "date TEXT," +
+                    "image TEXT," +
+                    "feed TEXT" +
                     ");"
         )
     }
@@ -89,7 +104,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val userList = mutableListOf<UserProfile>()
         val db = this.readableDatabase
 
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME", null)
+        val cursor = db.rawQuery("SELECT * FROM user_profiles", null)
 
         while (cursor.moveToNext()) {
             val primaryKey = cursor.getInt(cursor.getColumnIndex("primaryKey"))
@@ -116,7 +131,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val db = this.readableDatabase
 
         // profile 컬럼이 true인 row만 가져옴
-        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME WHERE profile = 1", null)
+        val cursor = db.rawQuery("SELECT * FROM user_profiles WHERE profile = 1", null)
 
         while (cursor.moveToNext()) {
             val primaryKey = cursor.getInt(cursor.getColumnIndex("primaryKey"))
@@ -132,6 +147,40 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         cursor.close()
         return userList
+    }
+
+    fun insertOrUpdateDiary(userId: String, date: String, image: String, feed: String) {
+        val db = writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put("userId", userId)
+        contentValues.put("date", date)
+        contentValues.put("image", image)
+        contentValues.put("feed", feed)
+        db.insertWithOnConflict("DiaryData", null, contentValues, SQLiteDatabase.CONFLICT_REPLACE)
+        db.close()
+    }
+
+    @SuppressLint("Range")
+    fun getDiary(date: String): DiaryData? {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM DiaryData WHERE date = ? ORDER BY id DESC", arrayOf(date)) // index 큰 순서로 정렬하여 최신 수정본 load
+        var diaryData: DiaryData? = null
+
+        if (cursor.moveToFirst()) {
+            val userId = cursor.getString(cursor.getColumnIndex("userId"))
+            val image = cursor.getString(cursor.getColumnIndex("image"))
+            val feed = cursor.getString(cursor.getColumnIndex("feed"))
+            diaryData = DiaryData(userId, date, image, feed)
+        }
+        cursor.close()
+        db.close()
+        return diaryData
+    }
+
+    fun deleteDiary(date: String) {
+        val db = this.writableDatabase
+        db.delete("DiaryData", "date = ?", arrayOf(date))
+        db.close()
     }
 
 }

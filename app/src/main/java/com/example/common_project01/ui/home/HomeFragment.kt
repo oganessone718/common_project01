@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import com.example.common_project01.databinding.FragmentHomeBinding
+import com.example.common_project01.ui.DatabaseHelper
 
 class HomeFragment : Fragment() {
 
@@ -25,7 +26,7 @@ class HomeFragment : Fragment() {
     private var currentMonth: Int = 0
     private var currentDay: Int = 0
     private lateinit var str: String
-    private lateinit var diaryDatabaseHelper: DiaryDatabaseHelper
+    private lateinit var diaryDatabaseHelper: DatabaseHelper
     companion object {
         const val IMAGE_REQUEST_CODE = 1000
     }
@@ -37,7 +38,7 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
-        diaryDatabaseHelper = DiaryDatabaseHelper(requireContext())
+        diaryDatabaseHelper = DatabaseHelper(requireContext())
 
         // 현재 날짜로 초기화
         val calendar = Calendar.getInstance()
