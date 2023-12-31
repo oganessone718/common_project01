@@ -84,7 +84,17 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.insert("user_profiles", null, values)
         db.close()
     }
-
+    fun addAllProfilesToDatabase(userList: List<UserProfile>) {
+        userList.forEach { userProfile ->
+            this.addProfile(
+                newName = userProfile.name,
+                newId = userProfile.id,
+                newIntro = userProfile.intro,
+                newImage = userProfile.image,
+                newProfile = userProfile.profile
+            )
+        }
+    }
     fun updateProfile(primaryKey: Int, updatedName:String, updatedId:String, updatedIntro:String, updatedImage: String) {
         val db = writableDatabase
         val values = ContentValues()

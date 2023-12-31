@@ -1,0 +1,78 @@
+[
+    {
+        "name": "나",
+        "id": "me",
+        "intro": "본인입니다.",
+        "image": "tmp",
+        "profile": true
+    },{
+        "name": "User1",
+        "id": "user01",
+        "intro": "This is a short introduction for User1.",
+        "image": "tmp",
+        "profile": false
+    },
+    {
+        "name": "User2",
+        "id": "user02",
+        "intro": "This is a short introduction for User2.",
+        "image": "tmp",
+        "profile": false
+    },
+    {
+        "name": "User3",
+        "id": "user03",
+        "intro": "This is a short introduction for User3.",
+        "image": "tmp",
+        "profile": false
+    },
+    {
+        "name": "User4",
+        "id": "user04",
+        "intro": "This is a short introduction for User4.",
+        "image": "tmp",
+        "profile": false
+    },
+    {
+        "name": "User5",
+        "id": "user05",
+        "intro": "This is a short introduction for User5.",
+        "image": "tmp",
+        "profile": false
+    },
+    {
+        "name": "User6",
+        "id": "user06",
+        "intro": "This is a short introduction for User6.",
+        "image": "tmp",
+        "profile": false
+    },
+    {
+        "name": "User7",
+        "id": "user07",
+        "intro": "This is a short introduction for User7.",
+        "image": "tmp",
+        "profile": false
+    },
+    {
+        "name": "User8",
+        "id": "user08",
+        "intro": "This is a short introduction for User8.",
+        "image": "tmp",
+        "profile": false
+    },
+    {
+        "name": "User9",
+        "id": "user09",
+        "intro": "This is a short introduction for User9.",
+        "image": "tmp",
+        "profile": false
+    },
+    {
+        "name": "User10",
+        "id": "user10",
+        "intro": "This is a short introduction for User10.",
+        "image": "tmp",
+        "profile": false
+    }
+]
