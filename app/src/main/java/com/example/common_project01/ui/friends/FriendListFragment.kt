@@ -3,6 +3,7 @@ package com.example.common_project01.ui.friends
 import FriendListAdapter
 import android.Manifest
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -23,6 +24,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.common_project01.R
 import com.example.common_project01.databinding.FragmentFriendListBinding
 import com.example.common_project01.ui.DatabaseHelper
+import com.example.common_project01.ui.UserProfile
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.File
 
 class FriendListFragment : Fragment() {
 
@@ -47,6 +52,14 @@ class FriendListFragment : Fragment() {
             }
         }
     }
+    fun readJsonFile(context: Context, fileName: String): List<UserProfile> {
+        val jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
+
+        val gson = Gson()
+        val userListType = object : TypeToken<List<UserProfile>>() {}.type
+        return gson.fromJson(jsonString, userListType)
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -60,17 +73,8 @@ class FriendListFragment : Fragment() {
 
         val dbHelper = DatabaseHelper(requireContext())
 
-//        // 데이터베이스에 유저 프로필 추가
-        if(dbHelper.getUserCount()<=0){
-            dbHelper.addProfile("박정민","oganessone718","제발살려줘","tmp",true)
-        }
-
-        if(dbHelper.getUserCount()<11){
-            for (i:Int in 1..10)
-                dbHelper.addProfile("john","JohnID","John, I'm tired!","tmp",false)
-        }
-
-        val userList = dbHelper.getUsers()
+        val userList  = readJsonFile(requireContext(), "users.json")
+        dbHelper.addAllProfilesToDatabase(userList)
 
         val myProfile = userList.find { it.profile }
         val friendList = userList.filter { !it.profile }
@@ -86,7 +90,7 @@ class FriendListFragment : Fragment() {
             myImage = myProfile.image
             profileImage = profileLayout.findViewById<ImageView>(R.id.profile_image)
 
-            if(myImage==="tmp"){
+            if(myImage=="tmp"){
                 profileImage.setImageResource(R.drawable.ic_launcher_background) //임시..
             }else{
                 val permission = Manifest.permission.READ_EXTERNAL_STORAGE

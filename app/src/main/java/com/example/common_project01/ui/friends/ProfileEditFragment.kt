@@ -189,7 +189,7 @@ class ProfileEditFragment : Fragment() {
             editName.setText(myProfile[0].name)
             editId.setText(myProfile[0].id)
             editIntro.setText(myProfile[0].intro)
-            if(myProfile[0].image==="tmp"){
+            if(myProfile[0].image=="tmp"){
                 editView.setImageResource(R.drawable.ic_launcher_background) //임시..
             }else{
                 editView.setImageURI(Uri.parse(myProfile[0].image))
