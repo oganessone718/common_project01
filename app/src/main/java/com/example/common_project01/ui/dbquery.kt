@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.icu.util.Calendar
 
 data class UserProfile(
     val primaryKey: Int, // PK ^^
@@ -28,7 +29,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         private const val DATABASE_NAME = "Database.db"
         private const val DATABASE_VERSION = 2
     }
+    private var currentYear: Int = 0
+    private var currentMonth: Int = 0
+    private var currentDay: Int = 0
 
+    private fun formatDate(year: Int, month: Int, day: Int): String {
+        return "$year-${month + 1}-$day"
+    }
 
     fun getUserCount(): Int {
         val db = this.readableDatabase
@@ -42,6 +49,27 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         cursor.close()
         return userCount
+    }
+
+    @SuppressLint("Range")
+    fun getProfileUserId(): String? {
+        val db = this.readableDatabase
+        val cursor = db.query(
+            "user_profiles", // 테이블 이름
+            arrayOf("id"), // 가져올 컬럼
+            "profile = ?", // 조건
+            arrayOf("1"), // 조건에 맞는 값
+            null,
+            null,
+            null
+        )
+
+        var userId: String? = null
+        if (cursor.moveToFirst()) {
+            userId = cursor.getString(cursor.getColumnIndex("id"))
+        }
+        cursor.close()
+        return userId
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -191,6 +219,36 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val db = this.writableDatabase
         db.delete("DiaryData", "date = ?", arrayOf(date))
         db.close()
+    }
+
+    @SuppressLint("Range")
+    fun getDiaryData(): List<DiaryData> {
+
+        val calendar = Calendar.getInstance()
+        currentYear = calendar.get(Calendar.YEAR)
+        currentMonth = calendar.get(Calendar.MONTH)
+        currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val date = formatDate(currentYear, currentMonth, currentDay)
+
+        val diaryList = mutableListOf<DiaryData>()
+        val db = this.readableDatabase
+
+        // 오늘 날짜에 해당하는 데이터만 조회
+        val cursor = db.rawQuery("SELECT * FROM DiaryData WHERE date = ? ORDER BY id DESC", arrayOf(date))
+
+        while (cursor.moveToNext()) {
+            val userId = cursor.getString(cursor.getColumnIndex("userId"))
+            val date = cursor.getString(cursor.getColumnIndex("date"))
+            val image = cursor.getString(cursor.getColumnIndex("image"))
+            val feed = cursor.getString(cursor.getColumnIndex("feed"))
+
+            diaryList.add(DiaryData(userId, date, image, feed))
+        }
+        cursor.close()
+        db.close()
+
+        return diaryList
     }
 
 }
