@@ -1,0 +1,26 @@
+<!-- res/layout/dialog_custom.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ImageButton
+        android:id="@+id/feedImage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_launcher_background"
+        android:layout_gravity="center" />
+
+    <EditText
+        android:id="@+id/editTextFeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="이 날의 일기를 작성해주세요." />
+
+    <Button
+        android:id="@+id/upload"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="올리기"/>
+</LinearLayout>
