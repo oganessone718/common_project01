@@ -1,53 +1,103 @@
 [
     {
-        "userId": "user01",
+        "userId": "yeongjae",
         "date": "2024-1-2",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/jg1",
         "feed": "Happy New Year~~~"
     },{
-        "userId": "user02",
+        "userId": "jeongmin",
         "date": "2024-1-2",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/jg2",
         "feed": "Happy New Year~~~"
     },{
-        "userId": "user03",
+        "userId": "minseo",
         "date": "2024-1-2",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/jg3",
         "feed": "Happy New Year~~~"
     },{
-        "userId": "user04",
+        "userId": "hyeongyu",
         "date": "2024-1-2",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/jg4",
         "feed": "Happy New Year~~~"
     },{
-        "userId": "user05",
+        "userId": "haejun",
         "date": "2024-1-2",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/jg5",
         "feed": "Happy New Year~~~"
     },{
-        "userId": "user06",
+        "userId": "sihyeon",
         "date": "2024-1-2",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/jg6",
         "feed": "Happy New Year~~~"
     },{
-        "userId": "user07",
+        "userId": "yunseo",
         "date": "2024-1-2",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/jg7",
         "feed": "Happy New Year~~~"
     },{
-        "userId": "user08",
+        "userId": "sumin",
         "date": "2024-1-2",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/jg8",
         "feed": "Happy New Year~~~"
     },{
-        "userId": "user09",
+        "userId": "haneul",
         "date": "2024-1-2",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/jg9",
         "feed": "Happy New Year~~~"
     },{
-        "userId": "user10",
+        "userId": "woohyeon",
         "date": "2024-1-2",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/jg10",
+        "feed": "Happy New Year~~~"
+    },{
+        "userId": "jiwon",
+        "date": "2024-1-2",
+        "image": "android.resource://com.example.common_project01/drawable/jg11",
+        "feed": "Happy New Year~~~"
+    },{
+        "userId": "mingu",
+        "date": "2024-1-2",
+        "image": "android.resource://com.example.common_project01/drawable/jg12",
+        "feed": "Happy New Year~~~"
+    },{
+        "userId": "gayeon",
+        "date": "2024-1-2",
+        "image": "android.resource://com.example.common_project01/drawable/jg13",
+        "feed": "Happy New Year~~~"
+    },{
+        "userId": "suhwan",
+        "date": "2024-1-2",
+        "image": "android.resource://com.example.common_project01/drawable/jg14",
+        "feed": "Happy New Year~~~"
+    },{
+        "userId": "suyeon",
+        "date": "2024-1-2",
+        "image": "android.resource://com.example.common_project01/drawable/jg15",
+        "feed": "Happy New Year~~~"
+    },{
+        "userId": "jinwoo",
+        "date": "2024-1-2",
+        "image": "android.resource://com.example.common_project01/drawable/jg16",
+        "feed": "Happy New Year~~~"
+    },{
+        "userId": "eunsu",
+        "date": "2024-1-2",
+        "image": "android.resource://com.example.common_project01/drawable/jg17",
+        "feed": "Happy New Year~~~"
+    },{
+        "userId": "hyungjin",
+        "date": "2024-1-2",
+        "image": "android.resource://com.example.common_project01/drawable/jg18",
+        "feed": "Happy New Year~~~"
+    },{
+        "userId": "jaewon",
+        "date": "2024-1-2",
+        "image": "android.resource://com.example.common_project01/drawable/jg19",
+        "feed": "Happy New Year~~~"
+    },{
+        "userId": "jinseok",
+        "date": "2024-1-2",
+        "image": "android.resource://com.example.common_project01/drawable/jg20",
         "feed": "Happy New Year~~~"
     }
 ]
