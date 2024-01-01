@@ -1,17 +1,23 @@
 package com.example.common_project01
 
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.common_project01.databinding.ActivityMainBinding
 import com.example.common_project01.ui.DatabaseHelper
+import com.example.common_project01.ui.UserProfile
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,11 +38,25 @@ class MainActivity : AppCompatActivity() {
         return findNavController(R.id.nav_host_fragment_activity_main).navigateUp() || super.onSupportNavigateUp()
     }
 
+    private fun readJsonFile(context: Context, fileName: String): List<UserProfile> {
+        val jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
+
+        val gson = Gson()
+        val userListType = object : TypeToken<List<UserProfile>>() {}.type
+        return gson.fromJson(jsonString, userListType)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
+        val firstUserList  = readJsonFile(this, "users.json")
+
+        val dbHelper = DatabaseHelper(this)
+
+        if (dbHelper.getUserCount()==0){
+            dbHelper.addAllProfilesToDatabase(firstUserList)
+        }
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)

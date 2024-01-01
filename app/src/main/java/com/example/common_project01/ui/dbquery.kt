@@ -5,7 +5,9 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import android.icu.util.Calendar
+
 
 data class UserProfile(
     val primaryKey: Int, // PK ^^
@@ -164,6 +166,38 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     @SuppressLint("Range")
+    fun getUser(userPrimaryKey:Int): UserProfile? {
+        val userList = mutableListOf<UserProfile>()
+        val db = this.readableDatabase
+
+        val cursor = db.query(
+            "user_profiles",
+            arrayOf("id", "name", "intro","image","profile"),
+            "primaryKey=?",
+            arrayOf(userPrimaryKey.toString()),
+            null, null, null, null
+        )
+
+        var user:UserProfile?= null
+
+        if (cursor != null && cursor.moveToFirst()) {
+            user = UserProfile(
+                primaryKey = userPrimaryKey,
+                id = cursor.getString(cursor.getColumnIndex("id")),
+                name= cursor.getString(cursor.getColumnIndex("name")),
+                intro = cursor.getString(cursor.getColumnIndex("intro")),
+                image = cursor.getString(cursor.getColumnIndex("intro")),
+                profile = cursor.getInt(cursor.getColumnIndex("profile"))==1,
+            )
+        }
+
+        cursor.close()
+        db.close()
+
+        return user
+    }
+
+    @SuppressLint("Range")
     fun getProfile(): List<UserProfile> {
         val userList = mutableListOf<UserProfile>()
         val db = this.readableDatabase
@@ -199,9 +233,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     @SuppressLint("Range")
-    fun getDiary(date: String): DiaryData? {
+    fun getDiary(date: String, searchUserId:String): DiaryData? {
         val db = this.readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM DiaryData WHERE date = ? ORDER BY id DESC", arrayOf(date)) // index 큰 순서로 정렬하여 최신 수정본 load
+        val cursor = db.rawQuery("SELECT * FROM DiaryData WHERE date = ? AND userId = ? ORDER BY id DESC", arrayOf(date,searchUserId)) // index 큰 순서로 정렬하여 최신 수정본 load
         var diaryData: DiaryData? = null
 
         if (cursor.moveToFirst()) {
