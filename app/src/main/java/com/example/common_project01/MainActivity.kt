@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity() {
         val jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
 
         val gson = Gson()
-        val diaryListType = object : TypeToken<List<DiaryData>>() {}.type
-        return gson.fromJson(jsonString, diaryListType)
+        val userListType = object : TypeToken<List<DiaryData>>() {}.type
+        return gson.fromJson(jsonString, userListType)
     }
 
 
@@ -63,7 +63,6 @@ class MainActivity : AppCompatActivity() {
 
         val dbHelper = DatabaseHelper(this)
         if (dbHelper.getUserCount()==0){
-            Log.d("okokok","okayyyyyyyyy")
             dbHelper.addAllProfilesToDatabase(firstUserList)
             dbHelper.addAlldiaryToDatabase(diarytmpList)
         }
