@@ -150,8 +150,13 @@ class HomeFragment : Fragment() {
                 Log.d("myTag","힘드됴")
                 loadDiaryData(year, month, dayOfMonth, userID)
             }
+            if(user.profile) {
+                mineButton.text = "하루 기록 추가하기"
+            }else{
 
-            if(user.primaryKey!=profile.primaryKey){
+                mineButton.text = "남들의 시나브로 보기"
+            }
+            if(!user.profile){
                 saveBtn.visibility = View.INVISIBLE
                 updateBtn.visibility = View.INVISIBLE
                 deleteBtn.visibility = View.INVISIBLE
@@ -199,9 +204,14 @@ class HomeFragment : Fragment() {
                     }, 2000)
                 }
                 mineButton.setOnClickListener{
-                    val bundle = Bundle()
-                    bundle.putInt("userPrimaryKey", profile.primaryKey) // 전달할 데이터
-                    findNavController().navigate(R.id.navigation_home, bundle)
+                    if(user.profile){
+                        mineButton
+                    }else{
+                        val bundle = Bundle()
+                        bundle.putInt("userPrimaryKey", profile.primaryKey) // 전달할 데이터
+                        findNavController().navigate(R.id.navigation_home, bundle)
+                    }
+
                 }
         }
 
@@ -286,6 +296,7 @@ class HomeFragment : Fragment() {
     }
 
     // 이미지 선택 결과를 처리하는 메서드
+    @SuppressLint("SuspiciousIndentation")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
