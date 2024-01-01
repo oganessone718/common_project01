@@ -22,8 +22,7 @@ class FriendListAdapter(private val friendList: List<UserProfile>, private val o
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_friend, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_friend, parent, false)
         return FriendViewHolder(view)
     }
 

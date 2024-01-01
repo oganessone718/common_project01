@@ -67,6 +67,9 @@ class HomeFragment : Fragment() {
         currentMonth = calendar.get(Calendar.MONTH)
         currentDay = calendar.get(Calendar.DAY_OF_MONTH)
 
+        val databaseHelper = DatabaseHelper(requireContext())
+        val userID = databaseHelper.getProfileUserId() ?: "UserId"
+
         // 초기 날짜로 일기 데이터 로드
         loadDiaryData(currentYear, currentMonth, currentDay, userID)
 
@@ -130,6 +133,7 @@ class HomeFragment : Fragment() {
 
         return view
     }
+
     private fun formatDate(year: Int, month: Int, day: Int): String {
         return "$year-${month + 1}-$day"
     }
@@ -184,6 +188,9 @@ class HomeFragment : Fragment() {
     // 이미지 선택 결과를 처리하는 메서드
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        val databaseHelper = DatabaseHelper(requireContext())
+        val userID = databaseHelper.getProfileUserId() ?: "UserId"
 
         if (requestCode == IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             data?.data?.let { imageUri ->
