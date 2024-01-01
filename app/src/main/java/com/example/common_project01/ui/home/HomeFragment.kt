@@ -81,6 +81,7 @@ class HomeFragment : Fragment() {
                 updateBtn.setOnClickListener {
                     contextEditText.visibility = View.VISIBLE
                     diaryContent.visibility = View.INVISIBLE
+                    str = contextEditText.text.toString()
                     contextEditText.setText(str)
                     saveBtn.visibility = View.VISIBLE
                     updateBtn.visibility = View.INVISIBLE
