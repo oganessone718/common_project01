@@ -25,6 +25,7 @@ import com.example.common_project01.R
 import com.example.common_project01.databinding.FragmentFriendListBinding
 import com.example.common_project01.ui.DatabaseHelper
 import com.example.common_project01.ui.UserProfile
+import com.example.common_project01.ui.home.HomeFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -50,13 +51,22 @@ class FriendListFragment : Fragment() {
             }
         }
     }
-    private fun readJsonFile(context: Context, fileName: String): List<UserProfile> {
-        val jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
 
-        val gson = Gson()
-        val userListType = object : TypeToken<List<UserProfile>>() {}.type
-        return gson.fromJson(jsonString, userListType)
-    }
+//    private fun goToOthersFragment(friend:UserProfile) {
+//        val bundle = Bundle()
+//        bundle.putInt("userPrimaryKey", friend.primaryKey) // 전달할 데이터
+//        Log.d("myTag",friend.primaryKey.toString())
+//
+//        val receiverFragment = HomeFragment()
+//        receiverFragment.arguments = bundle
+//
+//        // Fragment 이동
+//        fragmentManager?.beginTransaction()
+//            ?.replace(R.id.nav_host_fragment_activity_main, receiverFragment)
+//            ?.setReorderingAllowed(true)
+//            ?.addToBackStack(null)
+//            ?.commit()
+//    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -70,12 +80,10 @@ class FriendListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_friend_list, container, false)
 
         val dbHelper = DatabaseHelper(requireContext())
-
-        val firstUserList  = readJsonFile(requireContext(), "users.json")
-
-        if (dbHelper.getUserCount()==0){
-            dbHelper.addAllProfilesToDatabase(firstUserList)
-        }
+//
+//        if (dbHelper.getUserCount()==0){
+//            dbHelper.addAllProfilesToDatabase(firstUserList)
+//        }
 
         val userList = dbHelper.getUsers()
 
@@ -115,8 +123,10 @@ class FriendListFragment : Fragment() {
         }
 
         viewManager = LinearLayoutManager(activity)
-        viewAdapter = FriendListAdapter(friendList){
-            findNavController().navigate(R.id.navigation_home)
+        viewAdapter = FriendListAdapter(friendList){ friend ->
+            val bundle = Bundle()
+            bundle.putInt("userPrimaryKey", friend.primaryKey) // 전달할 데이터
+            findNavController().navigate(R.id.navigation_home, bundle)
         }
 
         recyclerView = view.findViewById<RecyclerView>(R.id.friends_recycler_view).apply {
@@ -134,6 +144,7 @@ class FriendListFragment : Fragment() {
 
         return view
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

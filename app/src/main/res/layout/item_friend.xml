@@ -50,13 +50,4 @@
             android:textSize="16sp" />
 
     </LinearLayout>
-<!--    <Button-->
-<!--        android:id="@+id/others_calender_button"-->
-<!--        android:layout_margin="2dp"-->
-<!--        android:textSize="12sp"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="end"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        android:text="@string/others_calender" />-->
 </LinearLayout>
