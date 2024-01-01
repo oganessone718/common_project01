@@ -1,24 +1,93 @@
 package com.example.common_project01.ui.home
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.content.Context
+import android.content.CursorLoader
 import android.icu.util.Calendar
 import android.net.Uri
+import android.os.Build
+import android.provider.DocumentsContract
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.common_project01.R
 import com.example.common_project01.databinding.FragmentHomeBinding
 import com.example.common_project01.ui.DatabaseHelper
 import com.example.common_project01.ui.UserProfile
+import com.example.common_project01.ui.friends.RealPathUtil
 import kotlin.properties.Delegates
 
+object RealPathUtil {
+
+    @SuppressLint("NewApi")
+    fun getRealPathFromURI_API19(context: Context, uri: Uri): String {
+        Log.d("myTag","19")
+        var filePath = ""
+        val wholeID = DocumentsContract.getDocumentId(uri)
+
+        // Split at colon, use second item in the array
+        val id = wholeID.split(":")[1]
+
+        val column = arrayOf(MediaStore.Images.Media.DATA)
+
+        // where id is equal to
+        val sel = MediaStore.Images.Media._ID + "=?"
+
+        context.contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            column, sel, arrayOf(id), null
+        )?.use { cursor ->
+            val columnIndex = cursor.getColumnIndex(column[0])
+
+            if (cursor.moveToFirst()) {
+                filePath = cursor.getString(columnIndex)
+            }
+        }
+
+        return filePath
+    }
+
+    @SuppressLint("NewApi")
+    fun getRealPathFromURI_API11to18(context: Context, contentUri: Uri): String? {
+        Log.d("myTag","18")
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursorLoader = CursorLoader(
+            context,
+            contentUri, proj, null, null, null
+        )
+        val cursor = cursorLoader.loadInBackground()
+
+        cursor?.use {
+            val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            if (cursor.moveToFirst()) {
+                return cursor.getString(column_index)
+            }
+        }
+        return null
+    }
+
+    fun getRealPathFromURI_BelowAPI11(context: Context, contentUri: Uri): String? {
+        Log.d("myTag","11")
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        context.contentResolver.query(contentUri, proj, null, null, null)?.use { cursor ->
+            val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            if (cursor.moveToFirst()) {
+                return cursor.getString(column_index)
+            }
+        }
+        return null
+    }
+}
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -36,11 +105,6 @@ class HomeFragment : Fragment() {
 
     companion object {
         const val IMAGE_REQUEST_CODE = 1000
-    }
-
-    override fun onResume() {
-        super.onResume()
-        userPrimaryKey = diaryDatabaseHelper.getProfile()[0].primaryKey
     }
 
     // onCreateView: Fragment의 뷰를 생성할 때 호출하는 메서드
@@ -87,6 +151,11 @@ class HomeFragment : Fragment() {
                 loadDiaryData(year, month, dayOfMonth, userID)
             }
 
+            if(user.primaryKey!=profile.primaryKey){
+                saveBtn.visibility = View.INVISIBLE
+                updateBtn.visibility = View.INVISIBLE
+                deleteBtn.visibility = View.INVISIBLE
+            }
                 saveBtn.setOnClickListener {
                     val date = formatDate(currentYear, currentMonth, currentDay)
                     val content = contextEditText.text.toString()
@@ -123,12 +192,16 @@ class HomeFragment : Fragment() {
                     contextEditText.visibility = View.VISIBLE
                     saveBtn.visibility = View.VISIBLE
                 }
-
                 pickImageButton.setOnClickListener {
                     pickImageFromGallery()
                     Handler(Looper.getMainLooper()).postDelayed({
                         binding.pickImageButton.visibility = View.INVISIBLE
                     }, 2000)
+                }
+                mineButton.setOnClickListener{
+                    val bundle = Bundle()
+                    bundle.putInt("userPrimaryKey", profile.primaryKey) // 전달할 데이터
+                    findNavController().navigate(R.id.navigation_home, bundle)
                 }
         }
 
@@ -143,29 +216,55 @@ class HomeFragment : Fragment() {
         val selectedDate = formatDate(year, month, day)
         val diaryData = diaryDatabaseHelper.getDiary(selectedDate,userID)
 
-        if (diaryData != null && diaryData.date == selectedDate) {
-            // diaryData가 존재하고, 선택된 날짜와 일치하는 경우 데이터 로딩
-            binding.diaryContent.setText(diaryData.feed)
-            binding.imageView.setImageURI(Uri.parse(diaryData.image))
-            binding.pickImageButton.visibility = View.INVISIBLE
-            // 이미지가 없으면 이미지 선택 버튼 보이게
-            if (diaryData.image.isEmpty()) {
-                binding.pickImageButton.visibility = View.VISIBLE
-            } else {
-                binding.pickImageButton.visibility = View.INVISIBLE
-            }
-            binding.contextEditText.visibility = View.INVISIBLE
-            binding.diaryContent.visibility = View.VISIBLE
-            binding.updateBtn.visibility = View.VISIBLE
-            binding.deleteBtn.visibility = View.VISIBLE
+
+        Log.d("myTag",user.primaryKey.toString()+profile.primaryKey.toString())
+        if(user.primaryKey!=profile.primaryKey){
+            Log.d("myTag","우리 다르긴 하져?")
             binding.saveBtn.visibility = View.INVISIBLE
-        } else {
-            // diaryData가 null이거나 선택된 날짜와 일치하지 않는 경우
-            clearUI()
-            binding.contextEditText.setText("")
-            binding.contextEditText.visibility = View.VISIBLE
-            binding.diaryContent.visibility = View.INVISIBLE  // diaryContent를 INVISIBLE로 설정
+            binding.updateBtn.visibility = View.INVISIBLE
+            binding.deleteBtn.visibility = View.INVISIBLE
+            if (diaryData != null && diaryData.date == selectedDate && diaryData.userId == user.id) {
+                // diaryData가 존재하고, 선택된 날짜와 일치하는 경우 데이터 로딩
+                binding.diaryContent.setText(diaryData.feed)
+                binding.imageView.setImageURI(Uri.parse(diaryData.image))
+                binding.contextEditText.visibility = View.INVISIBLE
+                binding.diaryContent.visibility = View.VISIBLE
+                binding.pickImageButton.visibility = View.INVISIBLE
+            } else {
+                // diaryData가 null이거나 선택된 날짜와 일치하지 않는 경우
+                clearUI()
+                binding.contextEditText.setText("")
+                binding.pickImageButton.visibility = View.INVISIBLE
+                binding.contextEditText.visibility = View.INVISIBLE
+                binding.diaryContent.visibility = View.INVISIBLE  // diaryContent를 INVISIBLE로 설정
+            }
+        }else{
+            if (diaryData != null && diaryData.date == selectedDate) {
+                // diaryData가 존재하고, 선택된 날짜와 일치하는 경우 데이터 로딩
+                binding.diaryContent.setText(diaryData.feed)
+                binding.imageView.setImageURI(Uri.parse(diaryData.image))
+                binding.pickImageButton.visibility = View.INVISIBLE
+                // 이미지가 없으면 이미지 선택 버튼 보이게
+                if (diaryData.image.isEmpty()&&(user.primaryKey==profile.primaryKey)) {
+                    binding.pickImageButton.visibility = View.VISIBLE
+                } else {
+                    binding.pickImageButton.visibility = View.INVISIBLE
+                }
+                binding.contextEditText.visibility = View.INVISIBLE
+                binding.diaryContent.visibility = View.VISIBLE
+                binding.updateBtn.visibility = View.VISIBLE
+                binding.deleteBtn.visibility = View.VISIBLE
+                binding.saveBtn.visibility = View.INVISIBLE
+            } else {
+                // diaryData가 null이거나 선택된 날짜와 일치하지 않는 경우
+                clearUI()
+                binding.contextEditText.setText("")
+                binding.contextEditText.visibility = View.VISIBLE
+                binding.diaryContent.visibility = View.INVISIBLE  // diaryContent를 INVISIBLE로 설정
+            }
         }
+
+
     }
 
     private fun clearUI() {
@@ -194,22 +293,57 @@ class HomeFragment : Fragment() {
         val userID = databaseHelper.getProfileUserId() ?: "UserId"
 
         if (requestCode == IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            data?.data?.let { imageUri ->
-                binding.imageView.setImageURI(imageUri)
-
-                val date = formatDate(currentYear, currentMonth, currentDay)
-                val diaryData = diaryDatabaseHelper.getDiary(date,user.id)
-
-                if (diaryData != null && diaryData.date == date) {
-                    // diaryData가 존재하고, 선택된 날짜와 일치하는 경우 데이터 로딩
-                    binding.diaryContent.text = diaryData.feed
+//
+            var realPath: String? = null
+            if (Build.VERSION.SDK_INT < 11)
+                Log.d("myTag","1111")
+                if (data != null) {
+                    realPath = data.data?.let { RealPathUtil.getRealPathFromURI_BelowAPI11(requireContext(), it) }
                 }
-                var feed = ""
-                if (diaryData != null) {
-                    feed = diaryData.feed
+            else if (Build.VERSION.SDK_INT < 19)
+                    Log.d("myTag","1199")
+                if (data != null) {
+                    realPath = data.data?.let { RealPathUtil.getRealPathFromURI_API11to18(requireContext(), it) }
                 }
-                diaryDatabaseHelper.insertOrUpdateDiary(userID, date, imageUri.toString(), feed)
+            else
+                if (data != null) {
+                    Log.d("myTag","elseelse")
+                    realPath = data.data?.let { RealPathUtil.getRealPathFromURI_API19(requireContext(), it) }
+                }
+            data?.data?.toString()?.let { Log.d("myTag", it) }
+
+            data?.data?.toString()?.let { Log.d("myTag", realPath.toString()) }
+            binding.imageView.setImageURI(Uri.parse(realPath))
+
+            val date = formatDate(currentYear, currentMonth, currentDay)
+            val diaryData = diaryDatabaseHelper.getDiary(date,user.id)
+
+            if (diaryData != null && diaryData.date == date) {
+                // diaryData가 존재하고, 선택된 날짜와 일치하는 경우 데이터 로딩
+                binding.diaryContent.text = diaryData.feed
             }
+            var feed = ""
+            if (diaryData != null) {
+                feed = diaryData.feed
+            }
+            diaryDatabaseHelper.insertOrUpdateDiary(userID, date, realPath.toString(), feed)
+//
+//            data?.data?.let { imageUri ->
+//                binding.imageView.setImageURI(imageUri)
+//
+//                val date = formatDate(currentYear, currentMonth, currentDay)
+//                val diaryData = diaryDatabaseHelper.getDiary(date,user.id)
+//
+//                if (diaryData != null && diaryData.date == date) {
+//                    // diaryData가 존재하고, 선택된 날짜와 일치하는 경우 데이터 로딩
+//                    binding.diaryContent.text = diaryData.feed
+//                }
+//                var feed = ""
+//                if (diaryData != null) {
+//                    feed = diaryData.feed
+//                }
+//                diaryDatabaseHelper.insertOrUpdateDiary(userID, date, imageUri.toString(), feed)
+//            }
         }
     }
     override fun onDestroyView() {
