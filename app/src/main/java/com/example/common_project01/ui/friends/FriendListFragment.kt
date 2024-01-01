@@ -2,12 +2,12 @@ package com.example.common_project01.ui.friends
 
 import FriendListAdapter
 import android.Manifest
-import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +27,6 @@ import com.example.common_project01.ui.DatabaseHelper
 import com.example.common_project01.ui.UserProfile
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.io.File
 
 class FriendListFragment : Fragment() {
 
@@ -35,7 +34,6 @@ class FriendListFragment : Fragment() {
     lateinit var profileImage: ImageView
     lateinit var myImage:String
 
-    // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
     override fun onRequestPermissionsResult(
@@ -65,8 +63,6 @@ class FriendListFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        Log.d("MyTag", "Create")
-
         lateinit var recyclerView: RecyclerView
         lateinit var viewAdapter: RecyclerView.Adapter<*>
         lateinit var viewManager: RecyclerView.LayoutManager
@@ -78,7 +74,6 @@ class FriendListFragment : Fragment() {
         val firstUserList  = readJsonFile(requireContext(), "users.json")
 
         if (dbHelper.getUserCount()==0){
-            Log.d("MyTag", "0개라고요?")
             dbHelper.addAllProfilesToDatabase(firstUserList)
         }
 
@@ -99,8 +94,7 @@ class FriendListFragment : Fragment() {
             profileImage = profileLayout.findViewById<ImageView>(R.id.profile_image)
 
             if(myImage=="tmp"){
-                profileImage.setImageResource(R.drawable.ic_launcher_background) //임시..
-                Log.d("MyTag", myImage)
+                profileImage.setImageResource(R.drawable.ic_launcher_background) //임시...
             }else{
                 val permission = Manifest.permission.READ_EXTERNAL_STORAGE
                 val granted = PackageManager.PERMISSION_GRANTED
@@ -121,7 +115,9 @@ class FriendListFragment : Fragment() {
         }
 
         viewManager = LinearLayoutManager(activity)
-        viewAdapter = FriendListAdapter(friendList)
+        viewAdapter = FriendListAdapter(friendList){
+            findNavController().navigate(R.id.navigation_home)
+        }
 
         recyclerView = view.findViewById<RecyclerView>(R.id.friends_recycler_view).apply {
             setHasFixedSize(true)
@@ -133,9 +129,9 @@ class FriendListFragment : Fragment() {
 // 버튼 클릭 핸들러
         val editProfileButton = view.findViewById<Button>(R.id.edit_profile_button)
         editProfileButton.setOnClickListener {
-            // 프로필 수정 프래그먼트로 이동하는 네비게이션 액션 실행
             findNavController().navigate(R.id.navigation_profile_edit)
         }
+
         return view
     }
 

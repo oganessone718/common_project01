@@ -2,6 +2,7 @@ package com.example.common_project01
 
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -13,11 +14,29 @@ import com.example.common_project01.databinding.ActivityMainBinding
 import com.example.common_project01.ui.DatabaseHelper
 
 class MainActivity : AppCompatActivity() {
+
     val MY_PERMISSION_ACCESS_ALL = 100
 
     private lateinit var binding: ActivityMainBinding
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(R.id.nav_host_fragment_activity_main).navigateUp() || super.onSupportNavigateUp()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)

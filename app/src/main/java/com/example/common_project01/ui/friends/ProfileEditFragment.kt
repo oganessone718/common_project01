@@ -143,7 +143,6 @@ class ProfileEditFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         var realPath: String? = null
-        Log.d("MyTag", "안 들어감..왜")
 
         if (requestCode == IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             val imageUri: Uri = data.data!!
@@ -156,7 +155,6 @@ class ProfileEditFragment : Fragment() {
                 realPath = data.data?.let { RealPathUtil.getRealPathFromURI_API19(requireContext(), it) }
             editView.setImageURI(Uri.parse(realPath))
             updatedImage = realPath.toString()
-            Log.d("MyTag", "안 들어감..왜")
         }
     }
 
@@ -190,6 +188,7 @@ class ProfileEditFragment : Fragment() {
             editName.setText(myProfile[0].name)
             editId.setText(myProfile[0].id)
             editIntro.setText(myProfile[0].intro)
+            updatedImage = myProfile[0].image
             if(myProfile[0].image=="tmp"){
                 editView.setImageResource(R.drawable.ic_launcher_background) //임시..
             }else{
@@ -210,6 +209,7 @@ class ProfileEditFragment : Fragment() {
             val updatedId = editId.text.toString()
             val updatedIntro = editIntro.text.toString()
             dbHelper.updateProfile(myPrimaryId, updatedName, updatedId, updatedIntro, updatedImage)
+            findNavController().navigate(R.id.navigation_friends)
         }
     }
 
