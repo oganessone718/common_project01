@@ -8,6 +8,7 @@ import android.os.Looper
 import android.content.Context
 import android.icu.util.Calendar
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,11 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+
+        val exampleArg = arguments?.getInt("userPrimaryKey")
+
+        Log.d("myTag",exampleArg.toString())
+
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
         diaryDatabaseHelper = DatabaseHelper(requireContext())
