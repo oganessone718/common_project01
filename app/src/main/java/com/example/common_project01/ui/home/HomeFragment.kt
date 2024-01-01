@@ -19,6 +19,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.common_project01.R
 import com.example.common_project01.databinding.FragmentHomeBinding
 import com.example.common_project01.ui.DatabaseHelper
 import com.example.common_project01.ui.UserProfile
@@ -194,6 +196,11 @@ class HomeFragment : Fragment() {
                     Handler(Looper.getMainLooper()).postDelayed({
                         binding.pickImageButton.visibility = View.INVISIBLE
                     }, 2000)
+                }
+                mineButton.setOnClickListener{
+                    val bundle = Bundle()
+                    bundle.putInt("userPrimaryKey", profile.primaryKey) // 전달할 데이터
+                    findNavController().navigate(R.id.navigation_home, bundle)
                 }
         }
 
