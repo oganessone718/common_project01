@@ -8,13 +8,13 @@ import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.common_project01.databinding.ActivityMainBinding
 import com.example.common_project01.ui.DatabaseHelper
+import com.example.common_project01.ui.DiaryData
 import com.example.common_project01.ui.UserProfile
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -45,18 +45,26 @@ class MainActivity : AppCompatActivity() {
         val userListType = object : TypeToken<List<UserProfile>>() {}.type
         return gson.fromJson(jsonString, userListType)
     }
+    private fun readdiaryJsonFile(context: Context, fileName: String): List<DiaryData> {
+        val jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
+
+        val gson = Gson()
+        val userListType = object : TypeToken<List<DiaryData>>() {}.type
+        return gson.fromJson(jsonString, userListType)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
         val firstUserList  = readJsonFile(this, "users.json")
+        val diarytmpList  = readdiaryJsonFile(this, "diarytmp.json")
 
         val dbHelper = DatabaseHelper(this)
-
         if (dbHelper.getUserCount()==0){
             dbHelper.addAllProfilesToDatabase(firstUserList)
-            Log.d("myTag","????")
+            dbHelper.addAlldiaryToDatabase(diarytmpList)
         }
         super.onCreate(savedInstanceState)
 

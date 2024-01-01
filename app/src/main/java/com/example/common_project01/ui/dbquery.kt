@@ -5,8 +5,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
 import android.icu.util.Calendar
+import android.util.Log
 
 
 data class UserProfile(
@@ -78,7 +78,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db?.execSQL(
             "CREATE TABLE user_profiles (" +
                     "primaryKey INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                    "id TEXT," +
+                    "id TEXT UNIQUE," +
                     "name TEXT," +
                     "intro TEXT," +
                     "image TEXT," +
@@ -91,7 +91,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     "userId TEXT," +
                     "date TEXT," +
                     "image TEXT," +
-                    "feed TEXT" +
+                    "feed TEXT," +
+                    "FOREIGN KEY (userId) REFERENCES user_profiles(id) ON UPDATE CASCADE" +
                     ");"
         )
     }
@@ -101,6 +102,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         onCreate(db);
     }
 
+    override fun onConfigure(db: SQLiteDatabase) {
+        super.onConfigure(db)
+        db.setForeignKeyConstraintsEnabled(true) // 외래 키 제약 조건 활성화
+    }
 
     fun addProfile(newName: String, newId: String, newIntro: String, newImage: String, newProfile: Boolean) {
         val db = writableDatabase
@@ -125,6 +130,36 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             )
         }
     }
+
+    fun addAlldiaryToDatabase(diaryList: List<DiaryData>) {
+        Log.d("okokok", "dbquery-alldiarytodatabase")
+        Log.d("okokok", "Diary list size: ${diaryList.size}")
+
+        if (diaryList.isNotEmpty()) {
+            try {
+                val firstDiary = diaryList[0]
+                Log.d("okokok", "First diary userId: ${firstDiary.userId}")
+                Log.d("okokok", "First diary date: ${firstDiary.date}")
+            } catch (e: Exception) {
+                Log.e("okokok", "Error accessing first diary data: ${e.message}")
+            }
+        }
+
+        diaryList.forEach { diaryData ->
+            try {
+                Log.d("okokok", "Processing diary for user: ${diaryData.userId}")
+                this.insertOrUpdateDiary(
+                    userId = diaryData.userId,
+                    date = diaryData.date,
+                    image = diaryData.image,
+                    feed = diaryData.feed
+                )
+            } catch (e: Exception) {
+                Log.e("okokok", "Error processing diary data for user: ${diaryData.userId}, Error: ${e.message}")
+            }
+        }
+    }
+
     fun updateProfile(primaryKey: Int, updatedName:String, updatedId:String, updatedIntro:String, updatedImage: String) {
         val db = writableDatabase
         val values = ContentValues()
@@ -224,6 +259,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun insertOrUpdateDiary(userId: String, date: String, image: String, feed: String) {
         val db = writableDatabase
         val contentValues = ContentValues()
+        Log.d("okokok",userId)
         contentValues.put("userId", userId)
         contentValues.put("date", date)
         contentValues.put("image", image)
