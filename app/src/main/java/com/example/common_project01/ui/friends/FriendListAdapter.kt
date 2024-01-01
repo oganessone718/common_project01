@@ -35,7 +35,6 @@ class FriendListAdapter(private val friendList: List<UserProfile>, private val o
         holder.introView.text = friend.intro
         holder.friendItem.setOnClickListener {
             holder.friendItem.setBackgroundColor(Color.parseColor("#ebecf0"))
-            Log.d("MyTag", "온클릭...")
             onButtonClicked(friend)
         }
     }

@@ -16,6 +16,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import com.example.common_project01.databinding.FragmentHomeBinding
 import com.example.common_project01.ui.DatabaseHelper
+import com.example.common_project01.ui.UserProfile
+import kotlin.properties.Delegates
 
 class HomeFragment : Fragment() {
 
@@ -23,28 +25,41 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var userID: String = "userID"
+    private lateinit var profile: UserProfile
     private var currentYear: Int = 0
     private var currentMonth: Int = 0
     private var currentDay: Int = 0
     private lateinit var str: String
     private lateinit var diaryDatabaseHelper: DatabaseHelper
+    private var userPrimaryKey by Delegates.notNull<Int>()
+    private lateinit var user:UserProfile
+
     companion object {
         const val IMAGE_REQUEST_CODE = 1000
     }
 
+    override fun onResume() {
+        super.onResume()
+        userPrimaryKey = diaryDatabaseHelper.getProfile()[0].primaryKey
+    }
 
     // onCreateView: Fragment의 뷰를 생성할 때 호출하는 메서드
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-
-        val exampleArg = arguments?.getInt("userPrimaryKey")
-
-        Log.d("myTag",exampleArg.toString())
+    ): View{
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
         diaryDatabaseHelper = DatabaseHelper(requireContext())
+
+        val tmpUserPrimaryKey = arguments?.getInt("userPrimaryKey")
+        profile = diaryDatabaseHelper.getProfile()[0]
+
+        userPrimaryKey = tmpUserPrimaryKey ?: profile.primaryKey
+
+        user = diaryDatabaseHelper.getUser(userPrimaryKey)!!
+        userID = user.id
+        Log.d("myTag",userPrimaryKey.toString())
 
         // 현재 날짜로 초기화
         val calendar = Calendar.getInstance()
@@ -53,25 +68,26 @@ class HomeFragment : Fragment() {
         currentDay = calendar.get(Calendar.DAY_OF_MONTH)
 
         // 초기 날짜로 일기 데이터 로드
-        loadDiaryData(currentYear, currentMonth, currentDay)
+        loadDiaryData(currentYear, currentMonth, currentDay, userID)
 
         // UI 초기화
         with(binding) {
-            title.text = "시나브로"
 
+            title.text = user?.name.toString()
+            Log.d("myTag",user?.name.toString())
             // CalendarView의 날짜 변경 리스너 설정
             calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
                 currentYear = year
                 currentMonth = month
                 currentDay = dayOfMonth
-
-                loadDiaryData(year, month, dayOfMonth)
+                Log.d("myTag","힘드됴")
+                loadDiaryData(year, month, dayOfMonth, userID)
             }
 
                 saveBtn.setOnClickListener {
                     val date = formatDate(currentYear, currentMonth, currentDay)
                     val content = contextEditText.text.toString()
-                    val diaryData = diaryDatabaseHelper.getDiary(date)
+                    val diaryData = user?.let { it1 -> diaryDatabaseHelper.getDiary(date, it1.id) }
                     val imageUri = diaryData?.image ?: ""
                     diaryDatabaseHelper.insertOrUpdateDiary(userID, date, imageUri, content)
                     contextEditText.visibility = View.INVISIBLE
@@ -118,9 +134,9 @@ class HomeFragment : Fragment() {
         return "$year-${month + 1}-$day"
     }
 
-    private fun loadDiaryData(year: Int, month: Int, day: Int) {
+    private fun loadDiaryData(year: Int, month: Int, day: Int, userID: String) {
         val selectedDate = formatDate(year, month, day)
-        val diaryData = diaryDatabaseHelper.getDiary(selectedDate)
+        val diaryData = diaryDatabaseHelper.getDiary(selectedDate,userID)
 
         if (diaryData != null && diaryData.date == selectedDate) {
             // diaryData가 존재하고, 선택된 날짜와 일치하는 경우 데이터 로딩
@@ -174,11 +190,11 @@ class HomeFragment : Fragment() {
                 binding.imageView.setImageURI(imageUri)
 
                 val date = formatDate(currentYear, currentMonth, currentDay)
-                val diaryData = diaryDatabaseHelper.getDiary(date)
+                val diaryData = diaryDatabaseHelper.getDiary(date,user.id)
 
                 if (diaryData != null && diaryData.date == date) {
                     // diaryData가 존재하고, 선택된 날짜와 일치하는 경우 데이터 로딩
-                    binding.diaryContent.setText(diaryData.feed)
+                    binding.diaryContent.text = diaryData.feed
                 }
                 var feed = ""
                 if (diaryData != null) {

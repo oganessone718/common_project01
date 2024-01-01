@@ -51,13 +51,6 @@ class FriendListFragment : Fragment() {
             }
         }
     }
-    private fun readJsonFile(context: Context, fileName: String): List<UserProfile> {
-        val jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
-
-        val gson = Gson()
-        val userListType = object : TypeToken<List<UserProfile>>() {}.type
-        return gson.fromJson(jsonString, userListType)
-    }
 
 //    private fun goToOthersFragment(friend:UserProfile) {
 //        val bundle = Bundle()
@@ -87,12 +80,10 @@ class FriendListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_friend_list, container, false)
 
         val dbHelper = DatabaseHelper(requireContext())
-
-        val firstUserList  = readJsonFile(requireContext(), "users.json")
-
-        if (dbHelper.getUserCount()==0){
-            dbHelper.addAllProfilesToDatabase(firstUserList)
-        }
+//
+//        if (dbHelper.getUserCount()==0){
+//            dbHelper.addAllProfilesToDatabase(firstUserList)
+//        }
 
         val userList = dbHelper.getUsers()
 
@@ -135,7 +126,6 @@ class FriendListFragment : Fragment() {
         viewAdapter = FriendListAdapter(friendList){ friend ->
             val bundle = Bundle()
             bundle.putInt("userPrimaryKey", friend.primaryKey) // 전달할 데이터
-            Log.d("myTag",friend.primaryKey.toString())
             findNavController().navigate(R.id.navigation_home, bundle)
         }
 
