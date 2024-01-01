@@ -140,7 +140,7 @@ class HomeFragment : Fragment() {
         // UI 초기화
         with(binding) {
 
-            title.text = user?.name.toString()
+            title.text = user?.id.toString()
             Log.d("myTag",user?.name.toString())
             // CalendarView의 날짜 변경 리스너 설정
             calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
