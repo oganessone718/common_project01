@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         if (dbHelper.getUserCount()==0){
             dbHelper.addAllProfilesToDatabase(firstUserList)
+            Log.d("myTag","????")
         }
         super.onCreate(savedInstanceState)
 
