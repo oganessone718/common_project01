@@ -154,6 +154,7 @@ class ProfileEditFragment : Fragment() {
             else
                 realPath = data.data?.let { RealPathUtil.getRealPathFromURI_API19(requireContext(), it) }
             editView.setImageURI(Uri.parse(realPath))
+            Log.d("myTag","T_T "+realPath.toString())
             updatedImage = realPath.toString()
         }
     }

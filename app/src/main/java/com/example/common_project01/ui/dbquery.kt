@@ -237,6 +237,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM DiaryData WHERE date = ? AND userId = ? ORDER BY id DESC", arrayOf(date,searchUserId)) // index 큰 순서로 정렬하여 최신 수정본 load
         var diaryData: DiaryData? = null
+        Log.d("myTag",searchUserId+"getget")
 
         if (cursor.moveToFirst()) {
             val userId = cursor.getString(cursor.getColumnIndex("userId"))
