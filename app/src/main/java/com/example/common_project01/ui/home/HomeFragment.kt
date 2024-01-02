@@ -29,6 +29,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.common_project01.ui.DiaryData
@@ -96,7 +98,6 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var profile: UserProfile
     private lateinit var selectedDate: String
     private lateinit var diaryDatabaseHelper: DatabaseHelper
@@ -250,9 +251,22 @@ class HomeFragment : Fragment() {
         val calendar = Calendar.getInstance()
         selectedDate = formatDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
 
-
+        if (userPrimaryKey != 1) {
+            binding.gobackImageView.visibility = View.VISIBLE
+        }
+        binding.gobackImageView.setOnClickListener {
+            // profile이 1인 사용자 데이터로 변경
+            user = diaryDatabaseHelper.getUser(1)!!
+            binding.gobackImageView.visibility = View.INVISIBLE
+            // 프래그먼트 새로고침
+            val bundle = Bundle()
+            bundle.putInt("userPrimaryKey", user.primaryKey) // 전달할 데이터
+            findNavController().navigate(R.id.navigation_home, bundle)
+        }
         // 초기 날짜로 일기 데이터 로드
         loadDiaryData(selectedDate, user.id)
+        val userName = user.name // 동적으로 설정할 사용자 이름
+        String.format(resources.getString(R.string.title_home), userName)
 
         // UI 초기화
         with(binding) {
@@ -342,16 +356,21 @@ class HomeFragment : Fragment() {
                 setScale(0.5f, 0.5f, 0.5f, 1.0f) // R, G, B 채널의 명도를 낮춤 (0.5는 50% 명도)
             }
 
-// 컬러 필터 적용
+            // 컬러 필터 적용
             binding.previewImage.colorFilter = ColorMatrixColorFilter(colorMatrix)
 
             isEmpty = false
             selectedDiary = diaryData
         }else{
             isEmpty = true
-            binding.previewFeed.text = "오늘의 기록이 없어요!"
+            binding.previewFeed.text = "해당 날짜의 기록이 없어요."
             binding.previewImage.setImageURI(Uri.parse("android.resource://com.example.common_project01/drawable/empty_image"))
         }
+    }
+
+    fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
+        val ft = fragmentManager.beginTransaction()
+        ft.detach(fragment).attach(fragment).commit()
     }
 
     override fun onDestroyView() {
