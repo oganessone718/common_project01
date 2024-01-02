@@ -311,6 +311,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
         return diaryData
     }
+    //.
 
     fun deleteDiary(date: String) {
         val db = this.writableDatabase
