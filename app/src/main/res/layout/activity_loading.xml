@@ -8,8 +8,8 @@
 
     <RelativeLayout
         android:id="@+id/background_layout"
-        android:layout_width="match_parent"
-        android:layout_height="388dp"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
         android:layout_centerInParent="true"
         android:background="@drawable/loading">
 
@@ -18,20 +18,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="시나브로"
-            android:textSize="60sp"
-            android:textColor="#FFFFFFFF"
             android:fontFamily="@font/leeseoyun"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="시나브로"
+            android:textColor="#FFFFFFFF"
+            android:textSize="50sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/textView"
             android:layout_centerHorizontal="true"
-            android:text="하루가 모여 인생이 된다."
-            android:textSize="15sp"
-            android:textColor="#CF3232"
             android:fontFamily="@font/leeseoyun"
-            android:paddingTop="5dp"/>
+            android:paddingTop="5dp"
+            android:text="하루가 모여 인생이 된다."
+            android:textColor="#CF3232"
+            android:textSize="15sp" />
     </RelativeLayout>
 </RelativeLayout>
