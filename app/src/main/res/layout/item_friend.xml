@@ -26,6 +26,7 @@
             android:layout_weight="1">
 
             <TextView
+                android:text="이름"
                 android:id="@+id/friend_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,10 +35,11 @@
                 android:textSize="18sp" />
 
             <TextView
+                android:text="thisis_id123"
                 android:id="@+id/friend_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="8dp"
+                android:layout_marginStart="8dp"
                 android:textSize="14sp" />
         </LinearLayout>
 

@@ -19,6 +19,7 @@ data class UserProfile(
 )
 
 data class DiaryData(
+    val id: Int, // PK ^^
     val userId: String,
     val date: String,
     val image: String,
@@ -173,6 +174,18 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
     }
 
+    fun updateDiary(primaryKey: Int, updatedUserId: String, updatedDate: String, updatedImage: String, updatedFeed: String) {
+        val db = writableDatabase
+        val values = ContentValues()
+
+        values.put("userId", updatedUserId)
+        values.put("date", updatedDate)
+        values.put("image", updatedImage)
+        values.put("feed", updatedFeed)
+        db.update("DiaryData", values, "id = ?", arrayOf(primaryKey.toString()))
+        db.close()
+    }
+
     // 유저 목록 가져오기
     @SuppressLint("Range")
     fun getUsers(): List<UserProfile> {
@@ -300,17 +313,18 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val cursor = db.rawQuery("SELECT * FROM DiaryData WHERE date = ? AND userId = ? ORDER BY id DESC", arrayOf(date,searchUserId)) // index 큰 순서로 정렬하여 최신 수정본 load
         var diaryData: DiaryData? = null
         if (cursor.moveToFirst()) {
+            val id = cursor.getInt(cursor.getColumnIndex("id"))
             val userId = cursor.getString(cursor.getColumnIndex("userId"))
             val image = cursor.getString(cursor.getColumnIndex("image"))
             val feed = cursor.getString(cursor.getColumnIndex("feed"))
-            diaryData = DiaryData(userId, date, image, feed)
+            diaryData = DiaryData(id, userId, date, image, feed)
         }
         cursor.close()
         db.close()
         return diaryData
     }
-    //.
 
+    // 수정하고싶은 욕심.. primarykey 입력하는 편이 DB적인 측면에서 더 낫지 않나... 시간상 참는다.
     fun deleteDiary(date: String, userId: String) {
         val db = this.writableDatabase
         db.delete("DiaryData", "date = ? AND userID = ?", arrayOf(date,userId))
@@ -334,12 +348,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val cursor = db.rawQuery("SELECT * FROM DiaryData WHERE date = ? ORDER BY id DESC", arrayOf(date))
 
         while (cursor.moveToNext()) {
+            val id = cursor.getInt(cursor.getColumnIndex("id"))
             val userId = cursor.getString(cursor.getColumnIndex("userId"))
             val date = cursor.getString(cursor.getColumnIndex("date"))
             val image = cursor.getString(cursor.getColumnIndex("image"))
             val feed = cursor.getString(cursor.getColumnIndex("feed"))
 
-            diaryList.add(DiaryData(userId, date, image, feed))
+            diaryList.add(DiaryData(id, userId, date, image, feed))
         }
         cursor.close()
         db.close()
