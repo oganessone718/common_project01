@@ -8,11 +8,10 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
 
         <TextView
-            android:paddingStart="16dp"
-            android:padding="2dp"
             android:id="@+id/profile_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,6 +55,7 @@
                         android:layout_weight="1">
 
                         <TextView
+                            android:text="이름"
                             android:id="@+id/profile_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -67,7 +67,9 @@
                             android:id="@+id/profile_id"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingStart="2dp"
+                            android:layout_marginStart="8dp"
+                            android:gravity="center_vertical"
+                            android:text="thisis_id123"
                             android:textSize="14sp" />
                     </LinearLayout>
 
@@ -87,7 +89,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_marginEnd="16dp"
                     android:text="@string/profile_edit" />
             </LinearLayout>
         </LinearLayout>
@@ -101,8 +102,6 @@
             android:orientation="vertical"
             android:scrollbars="vertical">
             <TextView
-                android:paddingStart="16dp"
-                android:padding="2dp"
                 android:id="@+id/friend_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

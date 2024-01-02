@@ -26,14 +26,20 @@ import android.graphics.ColorMatrixColorFilter
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.CalendarView
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.common_project01.ui.DiaryData
+import org.w3c.dom.Text
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 object RealPathUtil {
 
@@ -107,34 +113,46 @@ class HomeFragment : Fragment() {
     private lateinit var dialogView: View
     private lateinit var selectedDiary: DiaryData
     private var isEmpty by Delegates.notNull<Boolean>()
+    private lateinit var calendarView:CalendarView
+
     companion object {
         const val IMAGE_REQUEST_CODE = 1000
+    }
+    fun formatDateString(inputDate: String): String {
+        val inputFormat = SimpleDateFormat("yyyy-M-d", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+
+        return try {
+            val date = inputFormat.parse(inputDate)
+            if (date != null) outputFormat.format(date) else inputDate
+        } catch (e: Exception) {
+            inputDate  // 예외 발생 시 입력된 문자열을 그대로 반환
+        }
     }
 
     // 추가하기 겸 수정하기 -> 나
     private fun showAddDialog() {
+        // SimpleDateFormat을 사용하여 문자열 파싱
         (dialogView.parent as? ViewGroup)?.removeView(dialogView)
 
         val alertDialog = AlertDialog.Builder(requireContext())
         .setView(dialogView)
         .create()
 
-        val imageView = dialogView.findViewById<ImageView>(R.id.editImage)
+        val background = ContextCompat.getDrawable(requireContext(), R.drawable.dialog_background)
+        alertDialog.window?.setBackgroundDrawable(background)
+
+        val dateTitle = dialogView.findViewById<TextView>(R.id.dateTitle)
+        dateTitle.text = formatDateString(selectedDate)
+
+        val editImage = dialogView.findViewById<ImageView>(R.id.editImage)
+        val detailedFeed = dialogView.findViewById<TextView>(R.id.detailedFeed)
         val editFeed = dialogView.findViewById<EditText>(R.id.editFeed)
 
-        //기록 없음 -> 저장
-        if(isEmpty){
-            editFeed.hint = "일기를 작성해보세요!"
-            imageView.setImageURI(Uri.parse("android.resource://com.example.common_project01/drawable/empty_image"))
-            editFeed.setText("")
-        }
-        //기록 있음 -> 수정
-        else{
-            imageView.setImageURI(Uri.parse(selectedDiary.image))
-            editFeed.setText(selectedDiary.feed)
-        }
+        detailedFeed.visibility = View.GONE
+        editFeed.visibility = View.VISIBLE
 
-        imageView.setOnClickListener {
+        editImage.setOnClickListener {
             val photoPickerIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
             photoPickerIntent.type = "image/*"
             startActivityForResult(photoPickerIntent, IMAGE_REQUEST_CODE)
@@ -147,20 +165,46 @@ class HomeFragment : Fragment() {
         deleteBtn.visibility = View.GONE
         editBtn.visibility = View.GONE
         saveBtn.visibility = View.VISIBLE
-        editFeed.isEnabled = true
-
-        saveBtn.setOnClickListener{
-            diaryDatabaseHelper.insertOrUpdateDiary(
-                user.id,
-                selectedDate,
-                uploadImage,
-                editFeed.text.toString()
-            )
-//            val bundle = Bundle()
-//            bundle.putInt("userPrimaryKey", user.primaryKey) // 전달할 데이터
-//            findNavController().navigate(R.id.navigation_home, bundle)
-            alertDialog.dismiss()
+        //기록 없음 -> 저장
+        if(isEmpty){
+            editImage.setImageURI(Uri.parse("android.resource://com.example.common_project01/drawable/empty_image"))
+            editFeed.setText("")
+            uploadImage = "android.resource://com.example.common_project01/drawable/empty_image"
+            saveBtn.setOnClickListener{
+                diaryDatabaseHelper.insertOrUpdateDiary(
+                    user.id,
+                    selectedDate,
+                    uploadImage,
+                    editFeed.text.toString()
+                )
+                val bundle = Bundle()
+                bundle.putInt("userPrimaryKey", user.primaryKey) // 전달할 데이터
+                bundle.putString("onDate",selectedDate)
+                findNavController().navigate(R.id.navigation_home, bundle)
+                alertDialog.dismiss()
+            }
         }
+        //기록 있음 -> 수정
+        else{
+            uploadImage = selectedDiary.image
+            editImage.setImageURI(Uri.parse(selectedDiary.image))
+            editFeed.setText(selectedDiary.feed)
+            saveBtn.setOnClickListener{
+                diaryDatabaseHelper.updateDiary(
+                    selectedDiary.id,
+                    user.id,
+                    selectedDate,
+                    uploadImage,
+                    editFeed.text.toString()
+                )
+                val bundle = Bundle()
+                bundle.putInt("userPrimaryKey", user.primaryKey) // 전달할 데이터
+                bundle.putString("onDate",selectedDate)
+                findNavController().navigate(R.id.navigation_home, bundle)
+                alertDialog.dismiss()
+            }
+        }
+
 
         alertDialog.show()
     }
@@ -172,32 +216,43 @@ class HomeFragment : Fragment() {
             .setView(dialogView)
             .create()
 
+        val dateTitle = dialogView.findViewById<TextView>(R.id.dateTitle)
+        dateTitle.text = formatDateString(selectedDate)
+
+        val background = ContextCompat.getDrawable(requireContext(), R.drawable.dialog_background)
+        alertDialog.window?.setBackgroundDrawable(background)
+
         val editImage = dialogView.findViewById<ImageView>(R.id.editImage)
+        val detailedFeed = dialogView.findViewById<TextView>(R.id.detailedFeed)
         val editFeed = dialogView.findViewById<EditText>(R.id.editFeed)
+
+        detailedFeed.visibility = View.VISIBLE
+        editFeed.visibility = View.GONE
 
         val editBtn = dialogView.findViewById<Button>(R.id.editBtn)
         val deleteBtn = dialogView.findViewById<Button>(R.id.deleteBtn)
         val saveBtn = dialogView.findViewById<Button>(R.id.saveBtn)
 
         editImage.setImageURI(Uri.parse(selectedDiary.image))
-        editFeed.setText(selectedDiary.feed)
-
-        editFeed.isEnabled = false
+        detailedFeed.text = selectedDiary.feed
 
         editBtn.setOnClickListener{
             showAddDialog()
+            val bundle = Bundle()
+            bundle.putInt("userPrimaryKey", user.primaryKey) // 전달할 데이터
+            bundle.putString("onDate",selectedDate)
+            findNavController().navigate(R.id.navigation_home, bundle)
             alertDialog.dismiss()
         }
         deleteBtn.setOnClickListener{
             diaryDatabaseHelper.deleteDiary(selectedDate, user.id)
             editImage.setImageURI(Uri.parse("android.resource://com.example.common_project01/drawable/empty_image"))
-
-//            val bundle = Bundle()
-//            bundle.putInt("userPrimaryKey", user.primaryKey) // 전달할 데이터
-//            findNavController().navigate(R.id.navigation_home, bundle)
+            val bundle = Bundle()
+            bundle.putInt("userPrimaryKey", user.primaryKey) // 전달할 데이터
+            bundle.putString("onDate",selectedDate)
+            findNavController().navigate(R.id.navigation_home, bundle)
             alertDialog.dismiss()
         }
-
 
         //나이면
         if(user.profile){
@@ -249,7 +304,7 @@ class HomeFragment : Fragment() {
 
         // 현재 날짜로 초기화
         val calendar = Calendar.getInstance()
-        selectedDate = formatDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+        calendarView = binding.calendarView
 
         if (userPrimaryKey != 1) {
             binding.gobackImageView.visibility = View.VISIBLE
@@ -263,6 +318,19 @@ class HomeFragment : Fragment() {
             bundle.putInt("userPrimaryKey", user.primaryKey) // 전달할 데이터
             findNavController().navigate(R.id.navigation_home, bundle)
         }
+        selectedDate = arguments?.getString("onDate") ?: formatDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+
+
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = format.parse(selectedDate) // Date 객체
+
+        // Date 객체를 Calendar 객체로 변환
+        if (date != null) {
+            calendar.time = date
+        }
+
+        calendarView.setDate(calendar.timeInMillis, true, true)
+
         // 초기 날짜로 일기 데이터 로드
         loadDiaryData(selectedDate, user.id)
         val userName = user.name // 동적으로 설정할 사용자 이름
@@ -337,7 +405,7 @@ class HomeFragment : Fragment() {
 
         if (diaryData != null) {
             val previewText:String = if (diaryData?.feed?.length!! > 50) {
-                diaryData.feed.substring(0, 50)+ "..." // 50글자 이상이면 첫 50글자와 줄임표를 추가
+                diaryData.feed.substring(0, 50) + "..." // 50글자 이상이면 첫 50글자와 줄임표를 추가
             } else {
                 diaryData.feed // 50글자 미만이면 전체 문자열 사용
             }
