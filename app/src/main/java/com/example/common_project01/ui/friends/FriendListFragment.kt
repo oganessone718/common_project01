@@ -101,21 +101,18 @@ class FriendListFragment : Fragment() {
             myImage = myProfile.image
             profileImage = profileLayout.findViewById<ImageView>(R.id.profile_image)
 
-            if(myImage=="tmp"){
-                profileImage.setImageResource(R.drawable.ic_profile) //임시...
-            }else{
-                val permission = Manifest.permission.READ_EXTERNAL_STORAGE
-                val granted = PackageManager.PERMISSION_GRANTED
-                if (ContextCompat.checkSelfPermission(requireContext(), permission) != granted) {
-                    ActivityCompat.requestPermissions(
-                        requireActivity(),
-                        arrayOf(permission),
-                        ProfileEditFragment.IMAGE_REQUEST_CODE
-                    )
-                } else {
-                    profileImage.setImageURI(Uri.parse(myImage))
-                }
+            val permission = Manifest.permission.READ_EXTERNAL_STORAGE
+            val granted = PackageManager.PERMISSION_GRANTED
+            if (ContextCompat.checkSelfPermission(requireContext(), permission) != granted) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(permission),
+                    ProfileEditFragment.IMAGE_REQUEST_CODE
+                )
+            } else {
+                profileImage.setImageURI(Uri.parse(myImage))
             }
+
 
             profileId.text = myProfile.id
             profileName.text = myProfile.name

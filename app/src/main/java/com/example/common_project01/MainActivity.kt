@@ -55,8 +55,8 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        supportActionBar?.hide()
 
         val firstUserList  = readJsonFile(this, "users.json")
         val diarytmpList  = readdiaryJsonFile(this, "diarytmp.json")
