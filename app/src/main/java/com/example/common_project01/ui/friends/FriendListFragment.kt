@@ -102,7 +102,7 @@ class FriendListFragment : Fragment() {
             profileImage = profileLayout.findViewById<ImageView>(R.id.profile_image)
 
             if(myImage=="tmp"){
-                profileImage.setImageResource(R.drawable.ic_launcher_background) //임시...
+                profileImage.setImageResource(R.drawable.ic_profile) //임시...
             }else{
                 val permission = Manifest.permission.READ_EXTERNAL_STORAGE
                 val granted = PackageManager.PERMISSION_GRANTED

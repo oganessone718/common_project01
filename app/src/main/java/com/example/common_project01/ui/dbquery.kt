@@ -256,6 +256,32 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return userList
     }
 
+    fun getUserProfileImage(userId: String): String {
+        // 데이터베이스에 연결
+        val db = this.readableDatabase
+
+        // 쿼리를 실행하여 사용자 프로필 이미지 가져오기
+        val cursor = db.query(
+            "user_profiles", // 테이블 이름
+            arrayOf("profileImage"), // 가져올 컬럼
+            "userId = ?", // 조건
+            arrayOf(userId), // 조건에 대한 값
+            null,
+            null,
+            null
+        )
+
+        var imageUrl = ""
+        if (cursor.moveToFirst()) {
+            imageUrl = cursor.getString(cursor.getColumnIndexOrThrow("profileImage"))
+        }
+
+        cursor.close()
+        db.close()
+
+        return imageUrl
+    }
+
     fun insertOrUpdateDiary(userId: String, date: String, image: String, feed: String) {
         val db = writableDatabase
         val contentValues = ContentValues()
@@ -285,6 +311,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
         return diaryData
     }
+    //.
 
     fun deleteDiary(date: String) {
         val db = this.writableDatabase
