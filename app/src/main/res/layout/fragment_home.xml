@@ -10,7 +10,7 @@
         android:id="@+id/previewImage"
         android:scaleType="centerCrop"
         android:src="@drawable/empty_image"
-        app:layout_constraintHeight_percent="0.45"
+        app:layout_constraintHeight_percent="0.40"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
