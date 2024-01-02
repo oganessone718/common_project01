@@ -80,7 +80,7 @@
         "id": "jiwon",
         "intro": "This is a short introduction for User11.",
         "image": "tmp",
-        "profile": true
+        "profile": false
     },
     {
         "name": "민구",
