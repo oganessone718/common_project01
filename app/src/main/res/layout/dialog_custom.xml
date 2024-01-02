@@ -5,22 +5,49 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <ImageButton
-        android:id="@+id/feedImage"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/ic_launcher_background"
-        android:layout_gravity="center" />
+    <ImageView
+        android:id="@+id/editImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:src="@drawable/empty_image" />
 
     <EditText
-        android:id="@+id/editTextFeed"
+        android:id="@+id/editFeed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="이 날의 일기를 작성해주세요." />
+        android:hint="이 날의 일기를 작성해주세요."
+        android:text = "일기"
+        android:layout_marginTop="20dp"/>
 
-    <Button
-        android:id="@+id/upload"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="올리기"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginTop="20dp"
+    >
+        <Button
+            android:id="@+id/editBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수정"
+            android:layout_marginEnd="10dp"/>
+
+        <Button
+            android:id="@+id/deleteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="삭제"/>
+
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="저장" />
+    </LinearLayout>
+
+
 </LinearLayout>
