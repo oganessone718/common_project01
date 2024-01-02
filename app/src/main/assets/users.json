@@ -3,146 +3,146 @@
         "name": "나",
         "id": "me",
         "intro": "본인입니다.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": true
     },{
         "name": "영재",
         "id": "yeongjae",
         "intro": "This is a short introduction for User1.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/yeongjae",
         "profile": false
     },
     {
         "name": "정민",
         "id": "jeongmin",
         "intro": "This is a short introduction for User2.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/cat",
         "profile": false
     },
     {
         "name": "민서",
         "id": "minseo",
         "intro": "This is a short introduction for User3.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "현규",
         "id": "hyeongyu",
         "intro": "This is a short introduction for User4.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "해준",
         "id": "haejun",
         "intro": "This is a short introduction for User5.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "시현",
         "id": "sihyeon",
         "intro": "This is a short introduction for User6.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "윤서",
         "id": "yunseo",
         "intro": "This is a short introduction for User7.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "수민",
         "id": "sumin",
         "intro": "This is a short introduction for User8.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "하늘",
         "id": "haneul",
         "intro": "This is a short introduction for User9.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "우현",
         "id": "woohyeon",
         "intro": "This is a short introduction for User10.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "지원",
         "id": "jiwon",
         "intro": "This is a short introduction for User11.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "민구",
         "id": "mingu",
         "intro": "This is a short introduction for User12.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "가연",
         "id": "gayeon",
         "intro": "This is a short introduction for User13.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "수환",
         "id": "suhwan",
         "intro": "This is a short introduction for User14.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "수연",
         "id": "suyeon",
         "intro": "This is a short introduction for User15.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "진우",
         "id": "jinwoo",
         "intro": "This is a short introduction for User16.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "은수",
         "id": "eunsu",
         "intro": "This is a short introduction for User17.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "형진",
         "id": "hyungjin",
         "intro": "This is a short introduction for User18.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "재원",
         "id": "jaewon",
         "intro": "This is a short introduction for User19.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     },
     {
         "name": "진석",
         "id": "jinseok",
         "intro": "This is a short introduction for User20.",
-        "image": "tmp",
+        "image": "android.resource://com.example.common_project01/drawable/profileimg",
         "profile": false
     }
 ]

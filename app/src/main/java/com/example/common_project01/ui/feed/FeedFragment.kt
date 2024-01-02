@@ -10,6 +10,7 @@ import com.example.common_project01.R
 import com.example.common_project01.databinding.FragmentFeedBinding
 import com.example.common_project01.ui.DatabaseHelper
 import com.example.common_project01.ui.DiaryData
+import com.example.common_project01.ui.UserProfile
 
 class FeedFragment : Fragment() {
 
@@ -25,7 +26,8 @@ class FeedFragment : Fragment() {
 
         // DiaryData 로드 로직
         val diaryData = loadDiaryData() // 데이터 로드 함수
-        recyclerView.adapter = DiaryDataAdapter(diaryData)
+        val userData = loadUserData()
+        recyclerView.adapter = DiaryDataAdapter(diaryData, userData)
 
         return view
     }
@@ -33,6 +35,11 @@ class FeedFragment : Fragment() {
     private fun loadDiaryData(): List<DiaryData> {
         val databaseHelper = DatabaseHelper(requireContext())
         return databaseHelper.getDiaryData()
+    }
+
+    private fun loadUserData(): List<UserProfile> {
+        val databaseHelper = DatabaseHelper(requireContext())
+        return databaseHelper.getUsers()
     }
 
     override fun onDestroyView() {

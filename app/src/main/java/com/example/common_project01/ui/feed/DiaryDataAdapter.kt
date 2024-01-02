@@ -12,12 +12,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.common_project01.R
 import com.example.common_project01.ui.DiaryData
+import com.example.common_project01.ui.UserProfile
 
-class DiaryDataAdapter(private val diaryList: List<DiaryData>) : RecyclerView.Adapter<DiaryDataAdapter.DiaryViewHolder>() {
+class DiaryDataAdapter(private val diaryList: List<DiaryData>, private val userList: List<UserProfile>) : RecyclerView.Adapter<DiaryDataAdapter.DiaryViewHolder>() {
 
     class DiaryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val userIdView: TextView = view.findViewById(R.id.userId)
         val imageView: ImageView = view.findViewById(R.id.imageView)
+        val profileView: ImageView = view.findViewById(R.id.profileImage)
         val feedView: TextView = view.findViewById(R.id.feedText)
         val likeButton: ImageButton = view.findViewById(R.id.likeButton)
         var isLiked = false // 좋아요 상태 추적
@@ -30,12 +32,19 @@ class DiaryDataAdapter(private val diaryList: List<DiaryData>) : RecyclerView.Ad
 
     override fun onBindViewHolder(holder: DiaryViewHolder, position: Int) {
         val diary = diaryList[position]
+        val user = userList.find { it.id == diary.userId }
         holder.userIdView.text = diary.userId
         holder.feedView.text = diary.feed
         // Glide를 사용하여 이미지 로드
         Glide.with(holder.itemView.context)
             .load(diary.image) // 여기에 이미지 URL 또는 URI
             .into(holder.imageView) // 이미지를 표시할 ImageView
+        user?.let {
+            Glide.with(holder.itemView.context)
+                .load(it.image) // User 객체의 profileImage 사용
+                .into(holder.profileView) // 프로필 이미지를 표시할 ImageView
+        }
+
 
         holder.likeButton.setOnClickListener {
             if (holder.isLiked) {

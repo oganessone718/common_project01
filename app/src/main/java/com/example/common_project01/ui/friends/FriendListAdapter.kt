@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.common_project01.R
 import com.example.common_project01.ui.UserProfile
 
@@ -28,7 +29,9 @@ class FriendListAdapter(private val friendList: List<UserProfile>, private val o
 
     override fun onBindViewHolder(holder: FriendViewHolder, position: Int) {
         val friend = friendList[position]
-        holder.imageView.setImageResource(R.drawable.ic_home_black_24dp) //  임시
+        Glide.with(holder.itemView.context)
+            .load(friend.image) // 여기에 이미지 URL 또는 URI
+            .into(holder.imageView) // 이미지를 표시할 ImageView
         holder.nameView.text = friend.name
         holder.idView.text = friend.id
         holder.introView.text = friend.intro

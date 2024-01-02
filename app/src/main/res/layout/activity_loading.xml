@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/background_layout"
+        android:layout_width="match_parent"
+        android:layout_height="388dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/loading">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="시나브로"
+            android:textSize="60sp"
+            android:textColor="#FFFFFFFF"
+            android:fontFamily="@font/leeseoyun"
+            android:gravity="center" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView"
+            android:layout_centerHorizontal="true"
+            android:text="하루가 모여 인생이 된다."
+            android:textSize="15sp"
+            android:textColor="#CF3232"
+            android:fontFamily="@font/leeseoyun"
+            android:paddingTop="5dp"/>
+    </RelativeLayout>
+</RelativeLayout>
