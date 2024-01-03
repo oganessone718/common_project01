@@ -14,44 +14,52 @@ import com.example.common_project01.R
 import com.example.common_project01.ui.DiaryData
 import com.example.common_project01.ui.UserProfile
 
-class DiaryDataAdapter(private val diaryList: List<DiaryData>, private val userList: List<UserProfile>) : RecyclerView.Adapter<DiaryDataAdapter.DiaryViewHolder>() {
-
-    class DiaryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class DiaryDataAdapter(
+    private val diaryList: List<DiaryData>,
+    private val userList: List<UserProfile>,
+    private val isGridLayoutManager: Boolean // 레이아웃 타입 변수 추가
+) : RecyclerView.Adapter<DiaryDataAdapter.DiaryViewHolder>() {
+    class DiaryViewHolder(view: View, isGridLayoutManager: Boolean) : RecyclerView.ViewHolder(view) {
         val userIdView: TextView = view.findViewById(R.id.userId)
-        val imageView: ImageView = view.findViewById(R.id.imageView)
-        val profileView: ImageView = view.findViewById(R.id.profileImage)
-        val feedView: TextView = view.findViewById(R.id.feedText)
-        val likeButton: ImageButton = view.findViewById(R.id.likeButton)
+        val imageView: ImageView? = view.findViewById(R.id.imageView)
+        val profileView: ImageView? = view.findViewById(R.id.profileImage)
+        val feedView: TextView? = view.findViewById(R.id.feedText)
+        val likeButton: ImageButton? = view.findViewById(R.id.likeButton)
         var isLiked = false // 좋아요 상태 추적
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiaryViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_diary, parent, false)
-        return DiaryViewHolder(view)
+        val layoutId = if (isGridLayoutManager) R.layout.item_diary_grid else R.layout.item_diary
+        val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
+        return DiaryViewHolder(view, isGridLayoutManager)
     }
 
     override fun onBindViewHolder(holder: DiaryViewHolder, position: Int) {
         val diary = diaryList[position]
         val user = userList.find { it.id == diary.userId }
+
         holder.userIdView.text = diary.userId
-        holder.feedView.text = diary.feed
-        // Glide를 사용하여 이미지 로드
-        Glide.with(holder.itemView.context)
-            .load(diary.image) // 여기에 이미지 URL 또는 URI
-            .into(holder.imageView) // 이미지를 표시할 ImageView
-        user?.let {
+        holder.feedView?.text = diary.feed
+
+        // Glide를 사용하여 이미지 로드 (imageView가 nullable이므로 safe call 사용)
+        diary.image?.let { imageUrl ->
             Glide.with(holder.itemView.context)
-                .load(it.image) // User 객체의 profileImage 사용
-                .into(holder.profileView) // 프로필 이미지를 표시할 ImageView
+                .load(imageUrl)
+                .into(holder.imageView!!)
         }
 
+        // 프로필 이미지 로드 (profileView가 nullable이므로 safe call 사용)
+        user?.image?.let { userImageUrl ->
+            Glide.with(holder.itemView.context)
+                .load(userImageUrl)
+                .into(holder.profileView!!)
+        }
 
-        holder.likeButton.setOnClickListener {
+        // 좋아요 버튼 클릭 리스너 설정 (likeButton이 nullable이므로 safe call 사용)
+        holder.likeButton?.setOnClickListener {
             if (holder.isLiked) {
-                // 연한 회색빛 하얀색으로 변경
                 holder.likeButton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.light_grayish_white), PorterDuff.Mode.SRC_IN)
             } else {
-                // 연분홍색으로 변경
                 holder.likeButton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.light_pink), PorterDuff.Mode.SRC_IN)
             }
             holder.isLiked = !holder.isLiked

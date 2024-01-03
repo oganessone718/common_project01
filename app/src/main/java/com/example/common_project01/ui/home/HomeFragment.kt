@@ -357,7 +357,7 @@ class HomeFragment : Fragment() {
         }
 
         calendartoday = view.findViewById(R.id.mcalendarView)
-        calendartoday.setSelectedDate(CalendarDay.today())
+
         // 이미지가 있는 날짜에만 EventDecorator 적용
         if (datesWithImage.isNotEmpty()) {
             calendartoday.addDecorator(EventDecorator(datesWithImage))
@@ -376,7 +376,6 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.navigation_home, bundle)
         }
         selectedDate = arguments?.getString("onDate") ?: formatDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-
 
         val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val date = format.parse(selectedDate) // Date 객체
