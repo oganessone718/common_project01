@@ -8,15 +8,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/profile_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/profile_text"
-            android:textSize="14sp" />
 
         <!-- 프로필 레이아웃 -->
 
@@ -25,15 +18,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="-2dp"
-            android:orientation="vertical"
-            android:paddingTop="16dp">
+            android:orientation="vertical">
+
             <!-- 프로필 내용 (이미지, 이름 등)을 포함한 UI 요소를 여기에 추가 -->
+            <TextView
+                android:id="@+id/profile_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/pink_200"
+                android:padding="10dp"
+                android:text="@string/profile_text"
+                android:textSize="16sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="20dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile_image"
@@ -101,12 +103,15 @@
             android:layout_marginTop="-1dp"
             android:orientation="vertical"
             android:scrollbars="vertical">
+
             <TextView
                 android:id="@+id/friend_text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/friend_text"
-                android:textSize="14sp"/>
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:background="@color/pink_200"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/friends_recycler_view"

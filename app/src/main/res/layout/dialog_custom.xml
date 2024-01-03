@@ -31,13 +31,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="일기를 작성해주세요!"
+        android:maxLength="300"
         android:layout_margin="20dp"/>
 
     <TextView
         android:id="@+id/detailedFeed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="일기가 비어있어요."
         android:layout_margin="20dp"/>
 
     <LinearLayout
