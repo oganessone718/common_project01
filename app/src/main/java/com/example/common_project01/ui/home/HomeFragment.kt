@@ -23,7 +23,11 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
+import android.graphics.Typeface
 import android.provider.MediaStore
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
@@ -40,8 +44,14 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.common_project01.ui.DiaryData
+import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.DayViewDecorator
+import com.prolificinteractive.materialcalendarview.DayViewFacade
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import com.prolificinteractive.materialcalendarview.spans.DotSpan
 import org.w3c.dom.Text
 import java.text.SimpleDateFormat
+import java.util.Collections
 import java.util.Locale
 
 object RealPathUtil {
@@ -116,7 +126,6 @@ class HomeFragment : Fragment() {
     private lateinit var dialogView: View
     private lateinit var selectedDiary: DiaryData
     private var isEmpty by Delegates.notNull<Boolean>()
-    private lateinit var calendarView:CalendarView
 
     companion object {
         const val IMAGE_REQUEST_CODE = 1000
@@ -318,15 +327,41 @@ class HomeFragment : Fragment() {
         dialogView= LayoutInflater.from(requireContext()).inflate(R.layout.dialog_custom, null)
         diaryDatabaseHelper = DatabaseHelper(requireContext())
 
+        lateinit var calendartoday: MaterialCalendarView
+
         // user와 자기자신 초기화
         profile = diaryDatabaseHelper.getProfile()[0]
         userPrimaryKey = arguments?.getInt("userPrimaryKey") ?: profile.primaryKey
         user = diaryDatabaseHelper.getUser(userPrimaryKey)!!
-        binding.idReveal.text = user.id + "의 하루들"
+        binding.idReveal.text = user.name + "의 하루들"
 
         // 현재 날짜로 초기화
         val calendar = Calendar.getInstance()
-        calendarView = binding.calendarView
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) // 주의: month는 0부터 시작합니다.
+        val userId = user.id
+
+        // 이미지가 있는 날짜들을 담을 Set을 생성합니다.
+        val datesWithImage = HashSet<CalendarDay>()
+
+        // 달의 각 날짜에 대해 반복합니다.
+        for (day in 1..31) {
+            val selectedDate = formatDate(year, month, day)
+            val diary = diaryDatabaseHelper.getDiary(selectedDate, userId)
+
+            // 일기에 이미지가 있는 경우, 해당 날짜를 Set에 추가합니다.
+            if (diary?.image != null) {
+                val date = CalendarDay.from(year, month, day)
+                datesWithImage.add(date)
+            }
+        }
+
+        calendartoday = view.findViewById(R.id.mcalendarView)
+        calendartoday.setSelectedDate(CalendarDay.today())
+        // 이미지가 있는 날짜에만 EventDecorator 적용
+        if (datesWithImage.isNotEmpty()) {
+            calendartoday.addDecorator(EventDecorator(datesWithImage))
+        }
 
         if (userPrimaryKey != 1) {
             binding.gobackImageView.visibility = View.VISIBLE
@@ -350,8 +385,6 @@ class HomeFragment : Fragment() {
         if (date != null) {
             calendar.time = date
         }
-
-        calendarView.setDate(calendar.timeInMillis, true, true)
 
         // 초기 날짜로 일기 데이터 로드
         loadDiaryData(selectedDate, user.id)
@@ -390,7 +423,12 @@ class HomeFragment : Fragment() {
             }
 
             // CalendarView의 날짜 변경 리스너 설정
-            calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            mcalendarView.setOnDateChangedListener { widget, date, selected ->
+                // 선택된 날짜를 사용합니다.
+                val year = date.year
+                val month = date.month // 주의: month는 0부터 시작합니다.
+                val dayOfMonth = date.day
+
                 selectedDate = formatDate(year, month, dayOfMonth)
                 loadDiaryData(selectedDate, user.id)
                 // 남의 계정 + 기록 없음 -> nothing
@@ -468,5 +506,30 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+}
+class TodayDecorator: DayViewDecorator {
+    private var date = CalendarDay.today()
+
+    override fun shouldDecorate(day: CalendarDay?): Boolean {
+        return day?.equals(date)!!
+    }
+
+    override fun decorate(view: DayViewFacade?) {
+        view?.addSpan(StyleSpan(Typeface.BOLD))
+        view?.addSpan(RelativeSizeSpan(1.4f))
+        view?.addSpan(ForegroundColorSpan(Color.parseColor("#FFFFFF")))
+    }
+}
+class EventDecorator(dates: Collection<CalendarDay>): DayViewDecorator {
+
+    var dates: HashSet<CalendarDay> = HashSet(dates)
+
+    override fun shouldDecorate(day: CalendarDay?): Boolean {
+        return dates.contains(day)
+    }
+
+    override fun decorate(view: DayViewFacade?) {
+        view?.addSpan(DotSpan(5F, Color.parseColor("#FFAAAA")))
     }
 }
