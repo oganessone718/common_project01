@@ -4,20 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="2dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="4dp">
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:layout_margin="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,13 +51,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                android:layout_margin="8dp"/>
+                android:layout_margin="10dp"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="left"
-                android:padding="2dp"
+                android:layout_margin="2dp"
                 tools:ignore="ExtraText">
 
                 <ImageButton
@@ -76,6 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Feed Content"
+                android:layout_marginTop="4dp"
                 android:layout_marginLeft="8dp"/>
 
         </LinearLayout>

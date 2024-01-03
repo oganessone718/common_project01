@@ -301,6 +301,7 @@ class HomeFragment : Fragment() {
         profile = diaryDatabaseHelper.getProfile()[0]
         userPrimaryKey = arguments?.getInt("userPrimaryKey") ?: profile.primaryKey
         user = diaryDatabaseHelper.getUser(userPrimaryKey)!!
+        binding.idReveal.text = user.id + "의 하루들"
 
         // 현재 날짜로 초기화
         val calendar = Calendar.getInstance()
@@ -333,6 +334,8 @@ class HomeFragment : Fragment() {
 
         // 초기 날짜로 일기 데이터 로드
         loadDiaryData(selectedDate, user.id)
+        // 명도를 조정하는 컬러 매트릭스 생성
+
         val userName = user.name // 동적으로 설정할 사용자 이름
         String.format(resources.getString(R.string.title_home), userName)
 
@@ -419,7 +422,6 @@ class HomeFragment : Fragment() {
             binding.previewFeed.text = previewText
             binding.previewImage.setImageURI(Uri.parse(previewImage))
 
-            // 명도를 조정하는 컬러 매트릭스 생성
             val colorMatrix = ColorMatrix().apply {
                 setScale(0.5f, 0.5f, 0.5f, 1.0f) // R, G, B 채널의 명도를 낮춤 (0.5는 50% 명도)
             }
@@ -433,6 +435,7 @@ class HomeFragment : Fragment() {
             isEmpty = true
             binding.previewFeed.text = "해당 날짜의 기록이 없어요."
             binding.previewImage.setImageURI(Uri.parse("android.resource://com.example.common_project01/drawable/empty_image"))
+            binding.previewImage.colorFilter = null
         }
     }
 
