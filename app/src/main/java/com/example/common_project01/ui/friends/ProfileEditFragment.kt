@@ -33,6 +33,9 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.os.Build
+import android.text.Editable
+import android.text.InputFilter
+import android.text.TextWatcher
 import android.util.Log
 
 object RealPathUtil {
@@ -98,7 +101,6 @@ class ProfileEditFragment : Fragment() {
 
     private lateinit var editView: ImageView
     private lateinit var updatedImage: String
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -176,6 +178,49 @@ class ProfileEditFragment : Fragment() {
         val editId = view.findViewById<EditText>(R.id.edit_id)
         val editIntro = view.findViewById<EditText>(R.id.edit_intro)
         editView = view.findViewById<ImageView>(R.id.edit_image)
+
+        val nameLimit: TextView = view.findViewById(R.id.nameLimit)
+        val maxNameLength = editName.filters.filterIsInstance<InputFilter.LengthFilter>().firstOrNull()?.max ?: 0
+
+        editName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val currentLength = s?.length ?: 0
+                nameLimit.text = "$currentLength / $maxNameLength"
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        val introLimit: TextView = view.findViewById(R.id.introLimit)
+        val maxIntroLength = editIntro.filters.filterIsInstance<InputFilter.LengthFilter>().firstOrNull()?.max ?: 0
+
+        editIntro.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val currentLength = s?.length ?: 0
+                introLimit.text = "$currentLength / $maxIntroLength"
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+
+        val idLimit: TextView = view.findViewById(R.id.idLimit)
+        val maxIdLength = editId.filters.filterIsInstance<InputFilter.LengthFilter>().firstOrNull()?.max ?: 0
+
+        editId.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val currentLength = s?.length ?: 0
+                idLimit.text = "$currentLength / $maxIdLength"
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         var myPrimaryId = -1
 
