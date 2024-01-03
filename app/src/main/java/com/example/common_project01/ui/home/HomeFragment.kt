@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.content.Context
 import android.content.CursorLoader
 import android.icu.util.Calendar
+import java.util.Date
 import android.net.Uri
 import android.os.Build
 import android.provider.DocumentsContract
@@ -162,6 +163,7 @@ class HomeFragment : Fragment() {
         val editFeed = dialogView.findViewById<EditText>(R.id.editFeed)
 
         val textView: TextView = dialogView.findViewById(R.id.myTextView)
+        textView.visibility = View.VISIBLE
         val maxLength = editFeed.filters.filterIsInstance<InputFilter.LengthFilter>().firstOrNull()?.max ?: 0
 
         editFeed.addTextChangedListener(object : TextWatcher {
@@ -193,6 +195,7 @@ class HomeFragment : Fragment() {
         saveBtn.visibility = View.VISIBLE
         //기록 없음 -> 저장
         if(isEmpty){
+            saveBtn.isEnabled = false
             editImage.setImageURI(Uri.parse("android.resource://com.example.common_project01/drawable/upload_image"))
             editFeed.setText("")
             uploadImage = "android.resource://com.example.common_project01/drawable/empty_image"
@@ -239,9 +242,6 @@ class HomeFragment : Fragment() {
     private fun showMoreDialog() {
         (dialogView.parent as? ViewGroup)?.removeView(dialogView)
 
-
-
-
         val alertDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
@@ -256,7 +256,9 @@ class HomeFragment : Fragment() {
         val detailedFeed = dialogView.findViewById<TextView>(R.id.detailedFeed)
         val editFeed = dialogView.findViewById<EditText>(R.id.editFeed)
 
-        detailedFeed.visibility = View.VISIBLE
+        val textView: TextView = dialogView.findViewById(R.id.myTextView)
+        textView.visibility = View.GONE
+
         editFeed.visibility = View.GONE
 
         val editBtn = dialogView.findViewById<Button>(R.id.editBtn)
@@ -265,6 +267,11 @@ class HomeFragment : Fragment() {
 
         editImage.setImageURI(Uri.parse(selectedDiary.image))
         detailedFeed.text = selectedDiary.feed
+        if(detailedFeed.text==""){
+            detailedFeed.visibility = View.GONE
+        }else{
+            detailedFeed.visibility = View.VISIBLE
+        }
 
         editBtn.setOnClickListener{
             showAddDialog()
@@ -316,8 +323,22 @@ class HomeFragment : Fragment() {
             }
             dialogView.findViewById<ImageView>(R.id.editImage).setImageURI(Uri.parse(realPath.toString()))
             uploadImage = realPath.toString()
+
+            val saveBtn = dialogView.findViewById<Button>(R.id.saveBtn)
+
+            saveBtn.isEnabled = true
         }
     }
+    fun stringToDate(str: String): Date? {
+        val format = SimpleDateFormat("yyyy-MM-dd")
+        return try {
+            format.parse(str)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
     // onCreateView: Fragment의 뷰를 생성할 때 호출하는 메서드
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -357,7 +378,6 @@ class HomeFragment : Fragment() {
         }
 
         calendartoday = view.findViewById(R.id.mcalendarView)
-
         // 이미지가 있는 날짜에만 EventDecorator 적용
         if (datesWithImage.isNotEmpty()) {
             calendartoday.addDecorator(EventDecorator(datesWithImage))

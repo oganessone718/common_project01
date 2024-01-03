@@ -22,7 +22,8 @@
             android:gravity="center"
             android:text="시나브로"
             android:textColor="#FFFFFFFF"
-            android:textSize="50sp" />
+            android:textSize="50sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,7 +33,7 @@
             android:fontFamily="@font/leeseoyun"
             android:paddingTop="5dp"
             android:text="하루가 모여 인생이 된다."
-            android:textColor="#CF3232"
+            android:textColor="@color/white"
             android:textSize="15sp" />
     </RelativeLayout>
 </RelativeLayout>

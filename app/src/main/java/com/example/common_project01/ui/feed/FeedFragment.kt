@@ -1,8 +1,10 @@
 package com.example.common_project01.ui.feed
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +15,8 @@ import com.example.common_project01.ui.DatabaseHelper
 import com.example.common_project01.ui.DiaryData
 import com.example.common_project01.ui.UserProfile
 import androidx.recyclerview.widget.GridLayoutManager
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class FeedFragment : Fragment() {
 
@@ -41,6 +45,25 @@ class FeedFragment : Fragment() {
             // Adapter를 새로 생성하거나 변경된 레이아웃 타입을 Adapter에 전달
             binding.feedRecyclerView.adapter =
                 DiaryDataAdapter(diaryData, userData, isGridLayoutManager)
+// =======
+
+// class FeedFragment : Fragment() {
+
+//     private var _binding: FragmentFeedBinding? = null
+//     fun getCurrentFormattedDate(): String {
+//         val dateFormat = SimpleDateFormat("yyyy.MM.dd")
+//         return dateFormat.format(Date())
+//     }
+//     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+//         // Inflate the layout for this fragment
+//         val view = inflater.inflate(R.layout.fragment_feed, container, false)
+
+//         val todayDate = view.findViewById<TextView>(R.id.seconddTabDate)
+//         todayDate.text = getCurrentFormattedDate()
+
+//         val recyclerView: RecyclerView = view.findViewById(R.id.feed_recyclerView)
+//         recyclerView.layoutManager = LinearLayoutManager(context)
+// >>>>>>> master
 
             updateButtonIcon()
         }
