@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="56dp"
     tools:ignore="ExtraText">
 
     <RelativeLayout
@@ -116,8 +117,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/friends_recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="56dp" />
+                android:layout_height="match_parent"/>
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>
