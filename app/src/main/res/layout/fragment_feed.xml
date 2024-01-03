@@ -15,6 +15,32 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/pink_100"
+                android:padding="16dp"
+                android:layout_marginBottom="20dp"
+                >
+
+                <TextView
+                    android:id="@+id/seconddTabDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="2002.07.18"
+                    android:textSize="24dp" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="힐끔힐끔은 친구들이 작성한 오늘의 일기를 볼 수 있는 공간입니다."/>
+
+            </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/feed_recyclerView"
                 android:layout_width="match_parent"

@@ -28,6 +28,9 @@ import android.provider.MediaStore
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.text.Editable
+import android.text.InputFilter
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.CalendarView
@@ -158,6 +161,20 @@ class HomeFragment : Fragment() {
         val detailedFeed = dialogView.findViewById<TextView>(R.id.detailedFeed)
         val editFeed = dialogView.findViewById<EditText>(R.id.editFeed)
 
+        val textView: TextView = dialogView.findViewById(R.id.myTextView)
+        val maxLength = editFeed.filters.filterIsInstance<InputFilter.LengthFilter>().firstOrNull()?.max ?: 0
+
+        editFeed.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val currentLength = s?.length ?: 0
+                textView.text = "$currentLength / $maxLength"
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         detailedFeed.visibility = View.GONE
         editFeed.visibility = View.VISIBLE
 
@@ -176,7 +193,7 @@ class HomeFragment : Fragment() {
         saveBtn.visibility = View.VISIBLE
         //기록 없음 -> 저장
         if(isEmpty){
-            editImage.setImageURI(Uri.parse("android.resource://com.example.common_project01/drawable/empty_image"))
+            editImage.setImageURI(Uri.parse("android.resource://com.example.common_project01/drawable/upload_image"))
             editFeed.setText("")
             uploadImage = "android.resource://com.example.common_project01/drawable/empty_image"
             saveBtn.setOnClickListener{
@@ -221,6 +238,10 @@ class HomeFragment : Fragment() {
     //자세히 보기 -> 나/남
     private fun showMoreDialog() {
         (dialogView.parent as? ViewGroup)?.removeView(dialogView)
+
+
+
+
         val alertDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
@@ -255,7 +276,7 @@ class HomeFragment : Fragment() {
         }
         deleteBtn.setOnClickListener{
             diaryDatabaseHelper.deleteDiary(selectedDate, user.id)
-            editImage.setImageURI(Uri.parse("android.resource://com.example.common_project01/drawable/empty_image"))
+            editImage.setImageURI(Uri.parse("android.resource://com.example.common_project01/drawable/upload_image"))
             val bundle = Bundle()
             bundle.putInt("userPrimaryKey", user.primaryKey) // 전달할 데이터
             bundle.putString("onDate",selectedDate)
