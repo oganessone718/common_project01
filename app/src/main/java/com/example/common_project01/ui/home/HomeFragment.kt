@@ -153,6 +153,7 @@ class HomeFragment : Fragment() {
         val editFeed = dialogView.findViewById<EditText>(R.id.editFeed)
 
         val textView: TextView = dialogView.findViewById(R.id.myTextView)
+        textView.visibility = View.VISIBLE
         val maxLength = editFeed.filters.filterIsInstance<InputFilter.LengthFilter>().firstOrNull()?.max ?: 0
 
         editFeed.addTextChangedListener(object : TextWatcher {
@@ -184,6 +185,7 @@ class HomeFragment : Fragment() {
         saveBtn.visibility = View.VISIBLE
         //기록 없음 -> 저장
         if(isEmpty){
+            saveBtn.isEnabled = false
             editImage.setImageURI(Uri.parse("android.resource://com.example.common_project01/drawable/upload_image"))
             editFeed.setText("")
             uploadImage = "android.resource://com.example.common_project01/drawable/empty_image"
@@ -230,9 +232,6 @@ class HomeFragment : Fragment() {
     private fun showMoreDialog() {
         (dialogView.parent as? ViewGroup)?.removeView(dialogView)
 
-
-
-
         val alertDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
@@ -247,7 +246,9 @@ class HomeFragment : Fragment() {
         val detailedFeed = dialogView.findViewById<TextView>(R.id.detailedFeed)
         val editFeed = dialogView.findViewById<EditText>(R.id.editFeed)
 
-        detailedFeed.visibility = View.VISIBLE
+        val textView: TextView = dialogView.findViewById(R.id.myTextView)
+        textView.visibility = View.GONE
+
         editFeed.visibility = View.GONE
 
         val editBtn = dialogView.findViewById<Button>(R.id.editBtn)
@@ -256,6 +257,11 @@ class HomeFragment : Fragment() {
 
         editImage.setImageURI(Uri.parse(selectedDiary.image))
         detailedFeed.text = selectedDiary.feed
+        if(detailedFeed.text==""){
+            detailedFeed.visibility = View.GONE
+        }else{
+            detailedFeed.visibility = View.VISIBLE
+        }
 
         editBtn.setOnClickListener{
             showAddDialog()
@@ -307,6 +313,10 @@ class HomeFragment : Fragment() {
             }
             dialogView.findViewById<ImageView>(R.id.editImage).setImageURI(Uri.parse(realPath.toString()))
             uploadImage = realPath.toString()
+
+            val saveBtn = dialogView.findViewById<Button>(R.id.saveBtn)
+
+            saveBtn.isEnabled = true
         }
     }
     // onCreateView: Fragment의 뷰를 생성할 때 호출하는 메서드

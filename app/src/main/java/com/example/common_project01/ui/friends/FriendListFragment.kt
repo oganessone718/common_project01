@@ -51,23 +51,6 @@ class FriendListFragment : Fragment() {
             }
         }
     }
-
-//    private fun goToOthersFragment(friend:UserProfile) {
-//        val bundle = Bundle()
-//        bundle.putInt("userPrimaryKey", friend.primaryKey) // 전달할 데이터
-//        Log.d("myTag",friend.primaryKey.toString())
-//
-//        val receiverFragment = HomeFragment()
-//        receiverFragment.arguments = bundle
-//
-//        // Fragment 이동
-//        fragmentManager?.beginTransaction()
-//            ?.replace(R.id.nav_host_fragment_activity_main, receiverFragment)
-//            ?.setReorderingAllowed(true)
-//            ?.addToBackStack(null)
-//            ?.commit()
-//    }
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -80,10 +63,6 @@ class FriendListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_friend_list, container, false)
 
         val dbHelper = DatabaseHelper(requireContext())
-//
-//        if (dbHelper.getUserCount()==0){
-//            dbHelper.addAllProfilesToDatabase(firstUserList)
-//        }
 
         val userList = dbHelper.getUsers()
 

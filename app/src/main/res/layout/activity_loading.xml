@@ -32,7 +32,7 @@
             android:fontFamily="@font/leeseoyun"
             android:paddingTop="5dp"
             android:text="하루가 모여 인생이 된다."
-            android:textColor="#CF3232"
+            android:textColor="@color/pink_100"
             android:textSize="15sp" />
     </RelativeLayout>
 </RelativeLayout>
