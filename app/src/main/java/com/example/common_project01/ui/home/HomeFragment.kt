@@ -378,6 +378,7 @@ class HomeFragment : Fragment() {
         }
 
         calendartoday = view.findViewById(R.id.mcalendarView)
+
         // 이미지가 있는 날짜에만 EventDecorator 적용
         if (datesWithImage.isNotEmpty()) {
             calendartoday.addDecorator(EventDecorator(datesWithImage))

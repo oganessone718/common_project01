@@ -24,9 +24,19 @@ class FeedFragment : Fragment() {
     private val binding get() = _binding!!
     private var isGridLayoutManager = false
 
+    fun getCurrentFormattedDate(): String {
+        val dateFormat = SimpleDateFormat("yyyy.MM.dd")
+        return dateFormat.format(Date())
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentFeedBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        val view2 = inflater.inflate(R.layout.fragment_feed, container, false)
+
+        val todayDate = binding.seconddTabDate
+        todayDate.text = getCurrentFormattedDate()
 
         // RecyclerView 설정
         binding.feedRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -45,26 +55,6 @@ class FeedFragment : Fragment() {
             // Adapter를 새로 생성하거나 변경된 레이아웃 타입을 Adapter에 전달
             binding.feedRecyclerView.adapter =
                 DiaryDataAdapter(diaryData, userData, isGridLayoutManager)
-// =======
-
-// class FeedFragment : Fragment() {
-
-//     private var _binding: FragmentFeedBinding? = null
-//     fun getCurrentFormattedDate(): String {
-//         val dateFormat = SimpleDateFormat("yyyy.MM.dd")
-//         return dateFormat.format(Date())
-//     }
-//     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-//         // Inflate the layout for this fragment
-//         val view = inflater.inflate(R.layout.fragment_feed, container, false)
-
-//         val todayDate = view.findViewById<TextView>(R.id.seconddTabDate)
-//         todayDate.text = getCurrentFormattedDate()
-
-//         val recyclerView: RecyclerView = view.findViewById(R.id.feed_recyclerView)
-//         recyclerView.layoutManager = LinearLayoutManager(context)
-// >>>>>>> master
-
             updateButtonIcon()
         }
 
