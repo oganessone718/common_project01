@@ -34,17 +34,25 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp">
         <TextView
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="이름"
-            android:layout_marginEnd="20dp"/>
+            android:layout_marginEnd="10dp"/>
         <EditText
             android:id="@+id/edit_name"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="이름"
+            android:text="이름은열글자로제한함"
             android:maxLength="10"/>
-
+        <TextView
+            android:id="@+id/nameLimit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:gravity="end"
+            android:paddingStart="10dp"
+            android:textSize="10sp"
+            android:text="10/10" />
     </LinearLayout>
 
     <LinearLayout
@@ -54,16 +62,25 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp">
         <TextView
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="아이디"
-            android:layout_marginEnd="20dp"/>
+            android:layout_marginEnd="10dp"/>
         <EditText
             android:id="@+id/edit_id"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="아이디"
+            android:text="id is limited by 20."
             android:maxLength="20"/>
+        <TextView
+            android:id="@+id/idLimit"
+            android:paddingStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:gravity="end"
+            android:textSize="10sp"
+            android:text="20/20" />
 
     </LinearLayout>
 
@@ -74,17 +91,25 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp">
         <TextView
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="자기소개"
-            android:maxLength="30"
-            android:layout_marginEnd="20dp"/>
+            android:layout_marginEnd="10dp"/>
         <EditText
             android:id="@+id/edit_intro"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="자기소개"
-            android:maxLength="100"/>
+            android:text="자기소개는 백자. 자기소개는 백자.자기소개는 백자.자기소개는 백자.자기소개는 백자."
+            android:maxLength="50"/>
+        <TextView
+            android:id="@+id/introLimit"
+            android:paddingStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:gravity="end"
+            android:textSize="10sp"
+            android:text="50/50" />
 
     </LinearLayout>
     <Button

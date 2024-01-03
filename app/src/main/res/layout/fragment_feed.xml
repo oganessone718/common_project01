@@ -9,21 +9,17 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
-
 
             <LinearLayout
+                android:id="@+id/announcement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
                 android:background="@color/pink_100"
-                android:padding="16dp"
-                android:layout_marginBottom="20dp"
-                >
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
                     android:id="@+id/seconddTabDate"
@@ -37,14 +33,21 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="힐끔힐끔은 친구들이 작성한 오늘의 일기를 볼 수 있는 공간입니다."/>
+                    android:text="힐끔힐끔은 친구들이 작성한 오늘의 일기를 볼 수 있는 공간입니다." />
 
             </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:scrollbars="vertical"
+            android:padding="16dp"
+            android:layout_below="@+id/announcement">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/feed_recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="696dp" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </RelativeLayout>

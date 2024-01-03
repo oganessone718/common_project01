@@ -44,7 +44,6 @@
         android:text="0 / 100"
         android:layout_marginBottom="10dp"
         android:gravity="end"
-
         android:layout_marginHorizontal="20dp"/>
 
     <TextView
